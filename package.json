@@ -1,0 +1,29 @@
+{
+	"name": "fastshopping",
+	"version": "1.0.0",
+	"description": "Proyecto para la materia de integradora",
+	"main": "index.js",
+	"scripts": {
+		"start": "nodemon src/index",
+		"build": "babel src -d dist"
+	},
+	"keywords": [
+		"nodejs",
+		"express"
+	],
+	"author": "Armando Cruz",
+	"license": "ISC",
+	"dependencies": {
+		"express": "^4.17.1",
+		"express-validator": "^6.6.0",
+		"mysql2": "^2.1.0",
+		"pug": "^3.0.0",
+		"sequelize": "^6.3.0"
+	},
+	"devDependencies": {
+		"@babel/cli": "^7.10.4",
+		"@babel/core": "^7.10.4",
+		"@babel/preset-env": "^7.10.4",
+		"dotenv": "^8.2.0"
+	}
+}
