@@ -1,0 +1,42 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    background:#FFFF01;
+}
+.contenedor{
+    background: #FFF;
+    width: 90%;
+    max-width: 750px;
+    margin: auto;
+    margin-top: 50px;
+    padding: 5px 40px;
+    padding-bottom: 40px;
+    border-radius: 15px;
+}
+.contenedor .label1{
+    text-align: center;
+}
+.clase-button{
+    text-align: center;
+}
+.label{
+    font-size: 16px;    
+}
+.button{
+    background: #0166FE;
+    color: #fff;
+    display: inline-block;
+    margin: auto;
+    border: 0;
+    padding: 10px;
+    width: 70%;
+    max-width: 200px;
+    display: inline-block;
+    border-radius: 5px;
+    margin-top: 30px;
+}
+.button:hover{
+    background-color: #04A7FD;
