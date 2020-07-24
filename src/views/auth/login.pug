@@ -1,31 +1,21 @@
 doctype html
-html(lang='es')
+html(lang='es-MX')
+  include ../includes/head
+  html
   head
-    meta(charset='UTF-8')
-    meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    title= title
-    link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css', integrity='sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk', crossorigin='anonymous')
-    link(rel='stylesheet', href='/static/css/app.css')
-  body.login.vh-100.d-md-flex.flex-md-column.align-items-md-center.justify-content-md-center
-    h1.h1.display-4.display-md-3.text-center.mt-5.mt-md-0
-      | Fast Shopping
-    .app-content.mt-md-5.p-5
-      h3.h1.mb-2.mb-md-5 Iniciar sesión
-      form.needs-validation(action='#', method='POST', novalidate='')
-        .form-group
-          label(for='email') Correo electrónico
-          input#email.form-control.p-4.border-secondary(type='email', name='email', autofocus='', required='')
-          .invalid-feedback
-            | Ingrese un correo
-        .form-group
-          label(for='password') Contraseña
-          input#password.form-control.p-4.border-secondary(type='password', name='password', required='')
-          .invalid-feedback
-            | Ingrese una contraseña
-        input.btn.btn-success.btn-block.py-2.mt-5.text-center.lead(type='submit', value='Enviar')
-        a.text-center.d-block.mt-5.lead.text-primary.forget-password(href='#') ¿Olvidaste tu contraseña?
-        a.text-center.d-block.mt-4.lead.text-primary(href='#') ¿No tienes cuenta? Crea una gratis
-    script(src='https://code.jquery.com/jquery-3.5.1.slim.min.js', integrity='sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj', crossorigin='anonymous')
-    script(src='https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js', integrity='sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo', crossorigin='anonymous')
-    script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js', integrity='sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI', crossorigin='anonymous')
-    //- script(src='js/app.js')
+  body.auth
+    .contenedor.z-depth-4
+      h2.label1 Iniciar Sesión
+      form(action='')
+        span.label(for='Email')
+          i.Tiny.material-icons account_circle
+          | Email
+        input(type='text', placeholder='Escribe tu correo', required='')
+        span.label(for='Contraseña')
+          i.Tiny.material-icons lock
+          | Contraseña
+        input(type='password', placeholder='Escribe tu contraseña', min='8', max='16', required='')
+        a(href='#') ¿Haz olvidado tu contraseña?
+      .clase-button
+        input.button(type='submit', value='Iniciar sesión')
+    include ../includes/footer

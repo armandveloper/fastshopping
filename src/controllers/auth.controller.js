@@ -3,3 +3,9 @@ exports.mostrarLogin = (req, res) => {
 		titulo: 'Iniciar sesión | FastShopping',
 	});
 };
+
+exports.mostrarRegistro = (req, res) => {
+	res.render('auth/register', {
+		titulo: 'Registro | FastShopping',
+	});
+};
