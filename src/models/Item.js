@@ -24,6 +24,8 @@ Articulo.init(
 
 Articulo.belongsTo(Pedido, {
 	foreignKey: 'idPedido',
+	onDelete: 'CASCADE',
+	onUpdate: 'CASCADE',
 });
 
 module.exports = Articulo;
