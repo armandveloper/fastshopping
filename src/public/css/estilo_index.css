@@ -1,0 +1,39 @@
+/*Fondo*/
+body{
+    background-color: #FFFF01;
+    align-items: center;
+    justify-content: center;
+}
+.container-centro{
+    margin: auto;
+    max-width: 600px;
+    margin-top: 20%;
+}
+.area-btn{
+    margin-top: 60px;
+}
+.img-area{
+    margin:auto;
+    width: 50%;
+    max-width: 300px;
+}
+/*boton*/
+.boton{
+    display: inline-block;
+    background:#0166FE;
+    display: inline-block;
+    font-size: 20px;
+    margin: 10px;
+    color: #fff;
+    width: 40%;
+    font-family: sans-serif;
+}
+.boton :hover{
+    background-color:  #04A7FD;
+    border-radius: 13;
+}
+
+/*bordes*/
+.radio-medio{
+    border-radius: 10px;
+}
