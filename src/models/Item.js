@@ -1,6 +1,5 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/db');
-const Pedido = require('./Order');
 
 class Articulo extends Model {}
 
@@ -21,11 +20,5 @@ Articulo.init(
 		timestamps: false,
 	}
 );
-
-Articulo.belongsTo(Pedido, {
-	foreignKey: 'idPedido',
-	onDelete: 'CASCADE',
-	onUpdate: 'CASCADE',
-});
 
 module.exports = Articulo;

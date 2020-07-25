@@ -1,6 +1,18 @@
-const Articulo = require('../models/Item');
 const Pedido = require('../models/Order');
-const router = require('../routes/auth.routes');
+const Articulo = require('../models/Item');
+
+const actualizarImporte = async (idPedido, importe) => {
+	const pedido = await Pedido.findByPk(idPedido);
+	pedido.importe = importe;
+	pedido.total = importe + (importe * pedido.comision) / 100;
+	return await pedido.save();
+};
+
+const actualizarEstado = async (idPedido) => {
+	const pedido = await Pedido.findByPk(idPedido);
+	pedido.entregado = !pedido.entregado;
+	return await pedido.save();
+};
 
 exports.crearPedido = async (req, res) => {
 	// En el cuerpo de la petición debe recibir las propiedades
@@ -23,12 +35,15 @@ exports.crearPedido = async (req, res) => {
 		const articulosDB = await Articulo.bulkCreate(articulos2);
 		res.json({
 			ok: true,
-			pedidoDB,
-			articulosDB,
+			pedido: {
+				info: pedidoDB,
+				articulos: articulosDB,
+			},
 		});
 	} catch (err) {
 		console.log(err);
 		res.json({
+			ok: false,
 			error: err,
 		});
 	}
@@ -37,7 +52,17 @@ exports.crearPedido = async (req, res) => {
 exports.obtenerPedidos = async (req, res) => {
 	try {
 		const pedidos = await Pedido.findAll();
-		res.json({ pedidos });
+		const pedidosConArticulos = await Promise.all(
+			pedidos.map(async (pedido) => {
+				const articulos = await Articulo.findAll({
+					where: {
+						idPedido: pedido.idPedido,
+					},
+				});
+				return { info: pedido, articulos };
+			})
+		);
+		res.json({ ok: true, pedidos: pedidosConArticulos });
 	} catch (err) {
 		console.log(err);
 		res.json({ ok: false, mensaje: 'Error inesperado' });
@@ -63,12 +88,54 @@ exports.obtenerPedido = async (req, res) => {
 
 		res.json({
 			ok: true,
-			pedido,
-			articulos,
+			pedido: {
+				info: pedido,
+				articulos,
+			},
 		});
 	} catch (err) {
 		console.log(err);
 		res.json({ ok: false, mensaje: 'Error inesperado' });
+	}
+};
+
+exports.actualizarPedido = async (req, res) => {
+	const { campoActualizar, idPedido } = req.body;
+	if (campoActualizar === 'importe') {
+		try {
+			const pedido = await actualizarImporte(
+				idPedido,
+				Number(req.body.importe)
+			);
+			res.json({
+				ok: true,
+				pedido,
+			});
+		} catch (err) {
+			console.log(err);
+			res.json({
+				ok: false,
+				error: err,
+				mensaje:
+					'Ocurrió un error al actualizar el importe, inténtelo de nuevo',
+			});
+		}
+		return;
+	}
+	try {
+		const pedido = await actualizarEstado(idPedido);
+		res.json({
+			ok: true,
+			pedido,
+		});
+	} catch (err) {
+		console.log(err);
+		res.json({
+			ok: false,
+			error: err,
+			mensaje:
+				'Ocurrió un error al actualizar el estado de entregado, por favor intente de nuevo',
+		});
 	}
 };
 
