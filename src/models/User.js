@@ -18,12 +18,14 @@ Usuario.init(
 		},
 		email: {
 			type: DataTypes.STRING(60),
+			unique: true,
 		},
 		password: {
 			type: DataTypes.STRING(60),
 		},
 		telefono: {
 			type: DataTypes.CHAR(10),
+			unique: true,
 		},
 		colonia: {
 			type: DataTypes.STRING(45),
@@ -36,6 +38,8 @@ Usuario.init(
 		sequelize,
 		modelName: 'Usuario',
 		tableName: 'usuarios',
+		createdAt: 'creadoEl',
+		updatedAt: 'actualizadoEl',
 	}
 );
 

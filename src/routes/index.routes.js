@@ -5,6 +5,7 @@ const router = Router();
 
 router.get('/', mostrarInicio);
 router.use(require('./auth.routes'));
+router.use('/usuarios', require('./users.routes'));
 router.use('/pedidos', require('./orders.routes'));
 
 module.exports = router;
