@@ -1,21 +1,24 @@
 doctype html
 html(lang='es-MX')
   include ../includes/head
-  html
-  head
   body.auth
+    if error.length > 0
+      h1= error
+    if feedbackError.length > 0
+      each error in feedbackError
+        p= error
     .contenedor.z-depth-4
       h2.label1 Iniciar Sesión
-      form(action='')
+      form(action='/signin', method="POST")
         span.label(for='Email')
           i.Tiny.material-icons account_circle
           | Email
-        input(type='text', placeholder='Escribe tu correo', required='')
+        input(type='email', placeholder='Escribe tu correo', required='' name="email" autofocus)
         span.label(for='Contraseña')
           i.Tiny.material-icons lock
           | Contraseña
-        input(type='password', placeholder='Escribe tu contraseña', min='8', max='16', required='')
+        input(type='password', placeholder='Escribe tu contraseña', min='8', max='16', required='' name="password")
         a(href='#') ¿Haz olvidado tu contraseña?
-      .clase-button
-        input.button(type='submit', value='Iniciar sesión')
+        .clase-button
+          input.button(type='submit', value='Iniciar sesión')
     include ../includes/footer

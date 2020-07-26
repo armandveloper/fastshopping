@@ -36,3 +36,26 @@ exports.validarUsuario = [
 		next();
 	},
 ];
+exports.validarInicioSesion = [
+	body('email')
+		.isEmail()
+		.withMessage('El email es inválido')
+		.normalizeEmail(),
+	body('password')
+		.not()
+		.isEmpty()
+		.withMessage('Ingrese su contraseña')
+		.trim()
+		.escape(),
+	(req, res, next) => {
+		const errores = validationResult(req);
+		if (!errores.isEmpty()) {
+			req.flash(
+				'feedbackError',
+				errores.array().map((error) => error.msg)
+			);
+			return res.redirect('/login');
+		}
+		next();
+	},
+];
