@@ -12,11 +12,16 @@ body{
 .area-btn{
     margin-top: 60px;
 }
+.icono{
+    font-size: 40px;
+    color: white;
+}
+/*
 .img-area{
     margin:auto;
     width: 50%;
     max-width: 300px;
-}
+}*/
 /*boton*/
 .boton{
     display: inline-block;
