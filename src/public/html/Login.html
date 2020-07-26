@@ -1,33 +1,55 @@
 <!DOCTYPE html>
 <html lang="es-MX">
-<head>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="css/estilo_login_regis.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fast Shopping</title>
-</head>
-<body>
+	<head>
+		<link
+			href="https://fonts.googleapis.com/icon?family=Material+Icons"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../css/estilo_login_regis.css" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+		/>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Fast Shopping</title>
+	</head>
+	<body>
+		<div class="contenedor z-depth-4">
+			<h2 class="label1">Iniciar Sesión</h2>
+			<form action="/signin" method="POST">
+				<span for="Email" class="label"
+					><i class="Tiny material-icons" name="email"
+						>account_circle</i
+					>Email</span
+				>
+				<input type="text" placeholder="Escribe tu correo" required />
 
-    <div class="contenedor z-depth-4">
-        <h2 class="label1">Iniciar Sesión</h2>
-        <form action="">
-            <span for = "Email" class="label"><i class="Tiny material-icons">account_circle</i>Email</span>
-            <input type="text" placeholder="Escribe tu correo" required>
+				<span for="Contraseña" class="label"
+					><i class="Tiny material-icons" name="password">lock</i
+					>Contraseña</span
+				>
+				<input
+					type="password"
+					placeholder="Escribe tu contraseña"
+					min="8"
+					max="16"
+					required
+				/>
+				<div class="auth-acciones">
+					<a href="#">¿Haz olvidado tu contraseña?</a>
+					<a href="/registro">¿No tienes cuenta? ¡Crea una gratis!</a>
+				</div>
+				<div class="clase-button">
+					<input
+						type="submit"
+						class="button"
+						value="Iniciar sesión"
+					/>
+				</div>
+			</form>
+		</div>
 
-            <span for = "Contraseña" class="label"><i class="Tiny material-icons">lock</i>Contraseña</span>
-            <input type="password" placeholder="Escribe tu contraseña" min="8" max="16" required>
-                <a href="#">¿Haz olvidado tu contraseña?</a>
-        </form>
-        <div class="clase-button">
-            <input type="submit" class="button" value="Iniciar sesión">
-        </div>
-    </div>
-
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    
-</body>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	</body>
 </html>
