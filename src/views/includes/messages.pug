@@ -1,0 +1,13 @@
+if feedbackError.length > 0
+    each mensaje in feedbackError
+        .alerta.alerta-error
+            | #{mensaje}
+            
+if feedbackExito.length > 0
+    each mensaje in feedbackExito
+        .alerta.alerta-exito
+            | #{mensaje}
+if error.length > 0
+    each mensaje in error
+        .alerta.alerta-error
+            | #{mensaje}

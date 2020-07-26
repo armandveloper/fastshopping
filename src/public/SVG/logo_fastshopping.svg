@@ -66,6 +66,7 @@
          id="rect140"
          style="opacity:1;fill:none;stroke:#060606;stroke-width:9.96922016;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.99549549;paint-order:fill markers stroke" />
       <g
+      
          transform="matrix(0.14855957,0,0,0.14855957,62.750005,81.89062)"
          id="g961">
         <path
@@ -99,14 +100,14 @@
          id="flowRoot977"
          xml:space="preserve"><flowRegion
            id="flowRegion979"
-           style="fill:#000000"><rect
+           style="fill:#000"><rect
              y="64.84375"
              x="140.625"
              height="120.70312"
              width="412.5"
              id="rect981"
-             style="fill:#000000" /></flowRegion><flowPara
+             style="fill:#000" /></flowRegion><flowPara
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:48px;line-height:0;font-family:Verdana;-inkscape-font-specification:'Verdana Bold';text-align:center;letter-spacing:0px;text-anchor:middle;fill:#000000"
-           id="flowPara983">Fast Shopping</flowPara></flowRoot>    </g>
+           id="flowPara983">FastShopping</flowPara></flowRoot></g>
   </g>
 </svg>

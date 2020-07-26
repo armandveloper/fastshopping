@@ -21,13 +21,7 @@ exports.createUser = async (req, res) => {
 			password: hash,
 			telefono,
 		});
-		// Redirigir al login
-		// res.render('auth/login');
-
-		res.json({
-			ok: true,
-			usuario,
-		});
+		res.redirect('/login');
 	} catch (err) {
 		console.log(err);
 		res.json({

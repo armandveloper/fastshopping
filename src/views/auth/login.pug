@@ -2,23 +2,21 @@ doctype html
 html(lang='es-MX')
   include ../includes/head
   body.auth
-    if error.length > 0
-      h1= error
-    if feedbackError.length > 0
-      each error in feedbackError
-        p= error
+    include ../includes/messages
     .contenedor.z-depth-4
       h2.label1 Iniciar Sesión
-      form(action='/signin', method="POST")
+      form(action='/signin', method='POST')
         span.label(for='Email')
           i.Tiny.material-icons account_circle
           | Email
-        input(type='email', placeholder='Escribe tu correo', required='' name="email" autofocus)
+        input(type='text', placeholder='Escribe tu correo', required='', name="email", autofocus)
         span.label(for='Contraseña')
           i.Tiny.material-icons lock
           | Contraseña
-        input(type='password', placeholder='Escribe tu contraseña', min='8', max='16', required='' name="password")
-        a(href='#') ¿Haz olvidado tu contraseña?
+        input(type='password', placeholder='Escribe tu contraseña', minlength='8', maxlength='16', required='', name="password")
+        .auth-acciones
+          a(href='#') ¿Haz olvidado tu contraseña?
+          a(href='/registro') ¿No tienes cuenta? ¡Crea una gratis!
         .clase-button
           input.button(type='submit', value='Iniciar sesión')
-    include ../includes/footer
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js')

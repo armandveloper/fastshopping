@@ -2,33 +2,32 @@ doctype html
 html(lang='es-MX')
   include ../includes/head
   body.auth
+    include ../includes/messages
     .contenedor.z-depth-4
       h2.label1 Registrate
       form(action='/usuarios', method="POST")
         span.label(for='nombre')
           i.Tiny.material-icons person
           | Nombre
-          | 					completo
-        input(type='text', placeholder='Escribe tu nombre', required='')
+        input(type='text', placeholder='Escribe tu nombre', required='', name="nombre")
         span.label(for='Usuario')
           i.Tiny.material-icons person
-          | Nombre de
-          | 					usuario
-        input(type='Text', placeholder='Escribe un nombre de usuario', max='10', required='')
-        span.label(for='telefono')
-          i.Tiny.material-icons local_phone
-          | Numero de
-          | 					telefono
-        input(type='tel', placeholder='Ingresa un numero de tel. o cel.', required='')
+          | Apellido
+        input(type='text', placeholder='Escribe tu apellido', required='' name="apellido")
         span.label(for='correo')
           i.Tiny.material-icons mail
-          | Correo
-          | 					electronico
-        input(type='email', placeholder='Escribe tu correo', required='')
+          | Correo electrónico
+        input(type='email', placeholder='Escribe tu correo', required='' name="email")
+        span.label(for='telefono')
+          i.Tiny.material-icons local_phone
+          | Número de teléfono
+        input(type='tel', placeholder='Ingresa un número de tel.', required='', name="telefono", pattern="[0-9]{3}[0-9]{3}[0-9]{4}")
         span.label(for='contraseña')
           i.Tiny.material-icons lock
           | Contraseña
-        input(type='password', placeholder='Ingresa una contraseña de minimo 8 caracteres', min='8', max='16', required='')
+        input(type='password', placeholder='Ingresa una contraseña de minimo 8 caracteres', minlength='8', maxlength='16', required='' name="password")
+        .auth-acciones
+          a(href="/login") ¿Ya tienes cuenta? Inicia sesión
         .clase-button
           input.button(type='submit', value='Registrar')
     include ../includes/footer
