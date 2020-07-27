@@ -1,120 +1,55 @@
 <!DOCTYPE html>
-<html lang="es-Mx">
-<head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link rel="stylesheet" href="css/estilos-pedidos.css">
-	<meta charset="UTF-8">
-	<title>Fast Shopping</title>
-</head>
-<body>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<!-- Azul -->
-<div class="navar-fixed">
-  <nav class="nav-wrapper">
-    <div class="container ">
-      <a href="#" class="brand-logo center">Realizar pedidos</a>
-      <i class="material-icons left">lista</i>
-    </div>
-  </nav>
-</div>
-<br>
-
-
-<form action="">
-<!-- Rellenado del nombre -->
-<div class="row">
-	<div class="col s12 14 offset-14">
-		<div class="card">
-			<div class="form-field">
-				<label for="username">Nombre:</label>
-				<input type="text" id="username">
-			</div>
+<html lang="es-MX">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			href="https://fonts.googleapis.com/icon?family=Material+Icons"
+			rel="stylesheet"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+		/>
+		<link rel="stylesheet" href="../css/estilos-pedidos.css" />
+		<title>Fast Shopping</title>
+	</head>
+	<body>
+		<!-- Azul -->
+		<div class="navar-fixed">
+			<nav class="nav-wrapper">
+				<div class="container">
+					<a href="#" class="brand-logo center">Logo</a>
+					<i class="material-icons left">menu</i>
+				</div>
+			</nav>
 		</div>
-	</div>
-</div>
-<br>
-
-<!-- Agregar articulos -->
-<div class="row">
-	<div class="col s12 14 offset-14">
-		<div class="card">
-			<div class="form-field">
-				<br>
-				<label class="blue-text">Agregar articulos</label>
+		<p class="descripcion">Llene el formulario para agregar un producto</p>
+		<div class="contenido">
+			<form action="">
+				<!-- Rellenado del nombre -->
 				<div class="row">
-					
-<!-- Cantidad -->
-
-	<div class="col s6 14 offset-14">
-		<div class="card">
-			<div class="form-field">
-				<label for="comentarios">Cantidad</label>
-				<textarea id="pedidos" class="materilize-textarea" placeholder="ingresa la cantidad de articulos" style="border: none;"></textarea>
-			</div>
+					<div class="input-field col s12">
+						<input
+							type="text"
+							id="articulo"
+							class="validate"
+							name="articulo"
+						/>
+						<label for="articulo">Nombre Producto</label>
+					</div>
+					<div class="input-field col s12">
+						<input
+							type="number"
+							id="cantidad"
+							class="validate"
+							name="cantidad"
+						/>
+						<label for="cantidad">Cantidad</label>
+					</div>
+				</div>
+			</form>
 		</div>
-	</div>
-
-<!-- Articulos -->
-	<div class="col s6 14 offset-14">
-		<div class="card">
-			<div class="form-field">
-				<label for="comentarios">Articulos</label>
-				<textarea id="pedidos" class="materilize-textarea" placeholder="ingresa los articulos" style="border: none;"></textarea>
-			</div>
-		</div>
-	</div>
-
-<!-- comentarios -->
-
-	<div class="col s12 14 offset-14">
-		<div class="card">
-			<div class="form-field">
-				<br>
-				<label for="comentarios" class="blue-text">Agregar un comentario</label>
-				<textarea id="pedidos" class="materilize-textarea " style="border: none;"></textarea>
-				<br>
-				<br>
-				<label for="comentarios">Agregar nota de audio
-                <i class="material-icons left">mic</i>
-				</label>
-			</div>
-		</div>
-	</div>
-</div>
-
-		
-  
-
-<!-- comentarios -->
-<div>
-		<button type="submit">Agregar Ubicacion</button>
-		<button type="reset">Realizar pedido</button>
-</div>
-
-
-
-
-
-</div>
-</div>
-
-
-			</div>
-		</div>
-
-
-</form>
-
-
-
-
-
-
-
-
-
-
-	
-</body>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	</body>
 </html>

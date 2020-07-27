@@ -1,9 +1,34 @@
 doctype html
-html(lang="es-MX")
-    head
-        meta(charset="UTF-8")
-        meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        title= titulo
-    body
-        h1 Hola #{usuario.nombre} #{usuario.apellido} estás dentro
-        a(href="/logout") Cerrar sesión
+html(lang='es-MX')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css')
+    link(rel='stylesheet', href='/static/css/estilos-pedidos.css')
+    title Fast Shopping
+  body
+    // Azul
+    .navar-fixed
+      nav.nav-wrapper
+        .container
+          a.brand-logo.center(href='#') Logo
+          i.material-icons.left lista
+    h1
+      a.white-text(href="/logout") Cerrar sesión
+    p.descripcion Llene el formulario para agregar un producto
+    .contenido
+      form#productos-formulario(action='')
+        // Rellenado del nombre
+        .row
+          .input-field.col.s12.m8
+            input#articulo.validate(type='text', name='articulo', required)
+            label(for='articulo') Nombre Producto
+          .input-field.col.s12.m4
+            input#cantidad.validate(type='number', name='cantidad', required min="1")
+            label(for='cantidad') Cantidad
+          button.waves-effect.waves-light.btn.green.accent-4 Agregar producto
+      ul#productos-lista.productos
+      button#boton-enviar-pedido.waves-effect.waves-light.btn.blue.darken-3 Realizar pedido
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js')
+    script(src="/static/js/app.js")

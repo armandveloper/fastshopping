@@ -6,7 +6,12 @@ const { createUser } = require('../controllers/users.controller');
 const router = Router();
 
 router.post('/', validacion.validarUsuario, createUser);
-router.get('/perfil', estaAutenticado, (req, res) => {
+// router.get('/perfil', estaAutenticado, (req, res) => {
+// 	res.render('index', {
+// 		titulo: 'Bienvenido',
+// 	});
+// });
+router.get('/perfil', (req, res) => {
 	res.render('index', {
 		titulo: 'Bienvenido',
 	});

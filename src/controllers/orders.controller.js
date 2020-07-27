@@ -23,6 +23,7 @@ exports.crearPedido = async (req, res) => {
 	//
 	// }
 	const { articulos, infoPedido } = req.body;
+	// return res.status(201).json({ ok: true, articulos, infoPedido });
 	try {
 		const pedidoDB = await Pedido.create({
 			...infoPedido,
