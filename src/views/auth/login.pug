@@ -1,22 +1,22 @@
 doctype html
 html(lang='es-MX')
   include ../includes/head
-  body.auth
+  body
     include ../includes/messages
-    .contenedor.z-depth-4
+    .contenido
       h2.label1 Iniciar Sesión
       form(action='/signin', method='POST')
-        span.label(for='Email')
-          i.Tiny.material-icons account_circle
-          | Email
-        input(type='text', placeholder='Escribe tu correo', required='', name="email", autofocus)
-        span.label(for='Contraseña')
-          i.Tiny.material-icons lock
-          | Contraseña
-        input(type='password', placeholder='Escribe tu contraseña', minlength='8', maxlength='16', required='', name="password")
+        .row
+          .input-field.col.s12
+            i.tiny.material-icons.prefix account_circle
+            input#email.validate(type='email', placeholder='Escribe tu correo', required='', name="email", autofocus)
+            label.label(for='email') Email
+          .input-field.col.s12
+            i.tiny.material-icons.prefix lock
+            input#password.validate(type='password', placeholder='Escribe tu contraseña', minlength='8', maxlength='16', required='', name="password")
+            label.label(for='Contraseña') Contraseña
         .auth-acciones
           a(href='#') ¿Haz olvidado tu contraseña?
           a(href='/registro') ¿No tienes cuenta? ¡Crea una gratis!
-        .clase-button
-          input.button(type='submit', value='Iniciar sesión')
+        button.waves-effect.waves-light.btn-large.blue.darken-3(type='submit') Iniciar sesión
     script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js')

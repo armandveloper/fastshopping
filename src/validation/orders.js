@@ -15,7 +15,7 @@ exports.validarPedido = [
 			},
 		},
 		'infoPedido.idCliente': {
-			errorMessage: 'El id no es válido',
+			errorMessage: 'El pedido es incorrecto',
 			isInt: true,
 			toInt: true,
 		},
@@ -32,9 +32,10 @@ exports.validarPedido = [
 	(req, res, next) => {
 		const errores = validationResult(req);
 		if (!errores.isEmpty()) {
-			return res
-				.status(400)
-				.json({ ok: false, errores: errores.array() });
+			return res.status(400).json({
+				ok: false,
+				errores: errores.array().map((error) => error.msg),
+			});
 		}
 		next();
 	},
