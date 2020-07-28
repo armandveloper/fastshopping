@@ -1,5 +1,20 @@
-const { body, validationResult } = require('express-validator');
-
+const { body, param, validationResult } = require('express-validator');
+exports.validarEmail = [
+	param('email')
+		.isEmail()
+		.withMessage('El email es inválido')
+		.normalizeEmail(),
+	(req, res, next) => {
+		const errores = validationResult(req);
+		if (!errores.isEmpty()) {
+			return res.status(400).json({
+				ok: false,
+				mensaje: errores.array()[0],
+			});
+		}
+		next();
+	},
+];
 exports.validarUsuario = [
 	body('nombre')
 		.not()

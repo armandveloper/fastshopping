@@ -33,6 +33,17 @@ Usuario.init(
 		calle: {
 			type: DataTypes.STRING(45),
 		},
+		numExt: {
+			type: DataTypes.INTEGER,
+			allowNUll: false,
+			defaultValue: 1,
+		},
+		numInt: {
+			type: DataTypes.INTEGER,
+		},
+		referencias: {
+			type: DataTypes.STRING(60),
+		},
 	},
 	{
 		sequelize,

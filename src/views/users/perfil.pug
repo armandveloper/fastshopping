@@ -1,0 +1,41 @@
+doctype html
+html(lang='es-MX')
+  include ../includes/head
+  body
+    include ../includes/navbar
+
+    #contenido.contenido
+      .row
+        .input-field.col.s6
+          input.validate(name='nombre', type='text')
+          input.validate(name='apellidos', type='text')
+          label Nombre del usuario
+
+        .input-field-col.s6
+          input.validate(name="email", type="email")
+          label Email
+
+        .input-field-col.s6
+          input.validate(name="password" type="password")
+          label Contraseña
+        
+        .input-field-col.s6
+          input.validate(name="telefono", type="tel")
+          label Numero de telefono
+        
+        .input-field-col.s6
+          input.validate(name="colonia", type="text")
+          label Colonia
+        
+        .input-field-col.s6
+          input.validate(name="calle", type="text")
+          label Calle
+        .input-field-col.s6
+          input.validat(name="numExt", type="number")
+          label Numero Exterior
+        .input-field-col.s6
+          input.validate(name="numInt", type="number")
+          label Numero Interior
+        .input-field-col.s6
+          input.validate(name="references", type="text")
+          label Referencias

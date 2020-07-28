@@ -14,7 +14,7 @@ exports.mostrarRegistro = (req, res) => {
 
 exports.iniciarSesion = passport.authenticate('local', {
 	failureRedirect: '/login',
-	successRedirect: '/usuarios/perfil',
+	successRedirect: '/usuarios',
 	failureFlash: true,
 });
 

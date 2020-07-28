@@ -118,6 +118,7 @@ body {
 	}
 }
 .tab-item {
+	cursor: pointer;
 	padding: 1.5rem;
 }
 .tab-link {
@@ -159,11 +160,6 @@ label {
 input {
 	font-size: 20px;
 	color: #000;
-}
-
-textarea {
-	font-size: 16px;
-	color: #ffcaca;
 }
 .comentarios {
 	color: #000;

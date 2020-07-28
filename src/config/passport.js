@@ -11,7 +11,9 @@ passport.use(
 		},
 		async (email, password, terminar) => {
 			try {
-				const usuario = await Usuario.findOne({ where: { email } });
+				const usuario = await Usuario.findOne({
+					where: { email },
+				});
 				if (!usuario) {
 					return terminar(null, false, {
 						message: 'Usuario o contraseña incorrectos',
@@ -37,7 +39,11 @@ passport.serializeUser((usuario, terminar) => {
 
 passport.deserializeUser(async (id, terminar) => {
 	try {
-		const usuario = await Usuario.findByPk(id);
+		const usuario = await Usuario.findByPk(id, {
+			attributes: {
+				exclude: ['password'],
+			},
+		});
 		terminar(null, usuario);
 	} catch (err) {
 		terminar(err);
