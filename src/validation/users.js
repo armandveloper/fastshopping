@@ -2,14 +2,14 @@ const { body, param, validationResult } = require('express-validator');
 exports.validarEmail = [
 	param('email')
 		.isEmail()
-		.withMessage('El email es inválido')
+		.withMessage('El email no es válido')
 		.normalizeEmail(),
 	(req, res, next) => {
 		const errores = validationResult(req);
 		if (!errores.isEmpty()) {
 			return res.status(400).json({
 				ok: false,
-				mensaje: errores.array()[0],
+				mensaje: errores.array()[0].msg,
 			});
 		}
 		next();
@@ -30,7 +30,7 @@ exports.validarUsuario = [
 		.escape(),
 	body('email')
 		.isEmail()
-		.withMessage('El email es inválido')
+		.withMessage('El email no es válido')
 		.normalizeEmail(),
 	body('password')
 		.not()
@@ -62,7 +62,7 @@ exports.validarUsuario = [
 exports.validarInicioSesion = [
 	body('email')
 		.isEmail()
-		.withMessage('El email es inválido')
+		.withMessage('El email no es válido')
 		.normalizeEmail(),
 	body('password')
 		.not()

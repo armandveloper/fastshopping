@@ -3,39 +3,39 @@ html(lang='es-MX')
   include ../includes/head
   body
     include ../includes/navbar
-
+    img(src="/static/img/usuario.svg", alt=`${usuario.nombre || ''}` width="60", height="60")
     #contenido.contenido
-      .row
-        .input-field.col.s6
-          input.validate(name='nombre', type='text')
-          input.validate(name='apellidos', type='text')
-          label Nombre del usuario
+      form#formulario-perfil(action="/usuarios/actualizar", method="POST")
+        .row
+          .input-field.col.s6
+            input#nombre.validate(name='nombre', type='text', value=`${usuario.nombre || ''}`)
+            label(for="nombre") Nombre
+          .input-field.col.s6
+            input#apellido.validate(name='nombre', type='text' value=`${usuario.apellido || ''}`)
+            label(for='apellido') Apellido 
+          .input-field.col.s6
+            input#email.validate(name="email", type="email", value=`${usuario.email || ''}`)
+            label(for="email") Email        
+          .input-field.col.s6
+            input#telefono.validate(name="telefono", type="tel", value=`${usuario.telefono || ''}`)
+            label#telefono Numero de telefono
+          .input-field.col.s6
+            input#colonia.validate(name="colonia", type="text", value=`${usuario.colonia || ''}`)       
+            label(for="colonia") Colonia     
+          .input-field.col.s6
+            input#calle.validate(name="calle", type="text", value=`${usuario.calle || ''}`)
+            label(for="calle") Calle
+          .input-field.col.s6
+            input#numExt.validate(name="numExt", type="number", value=`${usuario.numExt || ''}`)
+            label(for="numExt") Numero Exterior
+          .input-field.col.s6
+            input#numInt.validate(name="numInt", type="number", value=`${usuario.numInt || ''}`)
+            label(for="numInt") Numero Interior
+          .input-field.col.s12
+            input#referencias.validate(name="referencias", type="text", value=`${usuario.referencias || ''}`)
+            label(for="referencias") Referencias
+        .row
+        .contenedor-boton-actualizar-perfil
+          button.waves-effect.waves-light.btn.blue.darken-3 Actualizar perfil
 
-        .input-field-col.s6
-          input.validate(name="email", type="email")
-          label Email
-
-        .input-field-col.s6
-          input.validate(name="password" type="password")
-          label Contraseña
-        
-        .input-field-col.s6
-          input.validate(name="telefono", type="tel")
-          label Numero de telefono
-        
-        .input-field-col.s6
-          input.validate(name="colonia", type="text")
-          label Colonia
-        
-        .input-field-col.s6
-          input.validate(name="calle", type="text")
-          label Calle
-        .input-field-col.s6
-          input.validat(name="numExt", type="number")
-          label Numero Exterior
-        .input-field-col.s6
-          input.validate(name="numInt", type="number")
-          label Numero Interior
-        .input-field-col.s6
-          input.validate(name="references", type="text")
-          label Referencias
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js', defer)

@@ -33,6 +33,7 @@ async function buscarUsuario() {
 		);
 		console.log(datos.usuario);
 	} catch (err) {
+		console.log(err);
 		Swal.fire({
 			icon: 'error',
 			title: 'Algo salió mal',
@@ -117,6 +118,12 @@ async function enviarPedido() {
 		);
 		productosFormulario.reset();
 		document.getElementById('notas').value = '';
+		productos = [];
+		const productosLista = document.getElementById('productos-lista');
+		while (productosLista.lastChild) {
+			productosLista.removeChild(productosLista.lastChild);
+		}
+		console.log(productos);
 	} catch (err) {
 		Swal.fire({
 			icon: 'error',
