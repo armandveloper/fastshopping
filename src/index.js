@@ -1,7 +1,6 @@
-const path = require('path');
-require('dotenv').config({
-	path: path.join(__dirname, '.env'),
-});
+if (process.env.NODE_ENV !== 'production') {
+	require('dotenv').config();
+}
 const sequelize = require('./config/db');
 const app = require('./server');
 require('./models/User');

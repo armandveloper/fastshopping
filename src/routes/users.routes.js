@@ -4,11 +4,14 @@ const validacion = require('../validation/users');
 const {
 	crearUsuario,
 	obtenerUsuarioPorEmail,
+	actualizarUsuario,
+	actualizarAvatar,
 } = require('../controllers/users.controller');
 
 const router = Router();
 
 router.post('/', validacion.validarUsuario, crearUsuario);
+router.put('/', actualizarUsuario);
 router.get('/', estaAutenticado, (req, res) => {
 	res.render('users/index', {
 		titulo: 'Bienvenido ' + res.locals.usuario.nombre,
@@ -30,5 +33,6 @@ router.get(
 	validacion.validarEmail,
 	obtenerUsuarioPorEmail
 );
+router.post('/imagen', actualizarAvatar);
 
 module.exports = router;

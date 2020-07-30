@@ -4,24 +4,24 @@ html(lang='es-MX')
   body
     include ../includes/messages
     .contenido
-      h2.label1 Registrate
+      h2.label1 Regístrate
       form(action='/usuarios', method="POST")
         .row
           .input-field.col.s12
             i.tiny.material-icons.prefix person
-            input#nombre.validate(type='text', placeholder='Escribe tu nombre', required='', name="nombre")
+            input#nombre.validate(type='text', placeholder='Escribe tu nombre', required='', name="nombre", value=nombre, autofocus)
             label.label(for='nombre') Nombre
           .input-field.col.s12
             i.tiny.material-icons.prefix person
-            input#apellido.validate(type='text', placeholder='Escribe tu apellido', required='' name="apellido")
+            input#apellido.validate(type='text', placeholder='Escribe tu apellido', required='' name="apellido", value=apellido)
             label.label(for='apellido') Apellido
           .input-field.col.s12
             i.tiny.material-icons.prefix mail
-            input#email.validate(type='email', placeholder='Escribe tu correo', required='' name="email")
+            input#email.validate(type='email', placeholder='Escribe tu correo', required='' name="email", value=email)
             label.label(for='email') Correo electrónico
           .input-field.col.s12
             i.tiny.material-icons.prefix local_phone
-            input#telefono.validate(type='tel', placeholder='Ingresa un número de tel.', required='', name="telefono", pattern="[0-9]{3}[0-9]{3}[0-9]{4}")
+            input#telefono.validate(type='tel', placeholder='Ingresa un número de tel.', required='', name="telefono", pattern='[0-9]{3}[0-9]{3}[0-9]{4}', value=telefono)
             label.label(for='telefono') Número de teléfono
           .input-field.col.s12
             i.tiny.material-icons.prefix lock
@@ -29,5 +29,5 @@ html(lang='es-MX')
             label.label(for='password') Contraseña
         .auth-acciones
           a(href="/login") ¿Ya tienes cuenta? Inicia sesión
-        button.waves-effect.waves-light.btn-large.blue.darken-3(type='submit') Iniciar sesión
+        button.waves-effect.waves-light.btn-large.blue.darken-3(type='submit') Registrarse
     include ../includes/footer

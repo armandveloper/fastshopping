@@ -3,36 +3,47 @@ html(lang='es-MX')
   include ../includes/head
   body
     include ../includes/navbar
-    img(src="/static/img/usuario.svg", alt=`${usuario.nombre || ''}` width="60", height="60")
+    form(action="/usuarios/imagen", method="POST", enctype="multipart/form-data")
+      input(type="hidden", name="idUsuario", value=usuario.idUsuario)
+      .file-field.input-field
+        .btn
+          span File
+          input(type='file', name="imagen")
+        .file-path-wrapper
+          input.file-path.validate(type='text')
+      button.waves-effect.waves-light.btn.blue.darken-3 Subir imagen
+
+    
+    img(src="https://res.cloudinary.com/dxmhr2agc/image/upload/v1596075793/fastshopping/profile/usuario_g6ovba.svg", alt=`${usuario.nombre || ''}` width="60", height="60")
     #contenido.contenido
-      form#formulario-perfil(action="/usuarios/actualizar", method="POST")
+      form#formulario-perfil(action="/usuarios")
         .row
           .input-field.col.s6
-            input#nombre.validate(name='nombre', type='text', value=`${usuario.nombre || ''}`)
+            input#nombre.validate(name='nombre', type='text', value=`${usuario.nombre || ''}`, required)
             label(for="nombre") Nombre
           .input-field.col.s6
-            input#apellido.validate(name='nombre', type='text' value=`${usuario.apellido || ''}`)
+            input#apellido.validate(name='nombre', type='text' value=`${usuario.apellido || ''}`, required)
             label(for='apellido') Apellido 
           .input-field.col.s6
-            input#email.validate(name="email", type="email", value=`${usuario.email || ''}`)
+            input#email.validate(name="email", type="email", value=`${usuario.email || ''}`, required)
             label(for="email") Email        
           .input-field.col.s6
-            input#telefono.validate(name="telefono", type="tel", value=`${usuario.telefono || ''}`)
+            input#telefono.validate(name="telefono", type="tel", value=`${usuario.telefono || ''}`, required)
             label#telefono Numero de telefono
           .input-field.col.s6
-            input#colonia.validate(name="colonia", type="text", value=`${usuario.colonia || ''}`)       
+            input#colonia.validate(name="colonia", type="text", value=`${usuario.colonia || ''}`, required)       
             label(for="colonia") Colonia     
           .input-field.col.s6
-            input#calle.validate(name="calle", type="text", value=`${usuario.calle || ''}`)
+            input#calle.validate(name="calle", type="text", value=`${usuario.calle || ''}`, required)
             label(for="calle") Calle
           .input-field.col.s6
-            input#numExt.validate(name="numExt", type="number", value=`${usuario.numExt || ''}`)
+            input#numExt.validate(name="numExt", type="number", value=`${usuario.numExt || ''}`, required)
             label(for="numExt") Numero Exterior
           .input-field.col.s6
-            input#numInt.validate(name="numInt", type="number", value=`${usuario.numInt || ''}`)
+            input#numInt.validate(name="numInt", type="number", value=`${usuario.numInt || ''}`, required)
             label(for="numInt") Numero Interior
           .input-field.col.s12
-            input#referencias.validate(name="referencias", type="text", value=`${usuario.referencias || ''}`)
+            input#referencias.validate(name="referencias", type="text", value=`${usuario.referencias || ''}`, required)
             label(for="referencias") Referencias
         .row
         .contenedor-boton-actualizar-perfil

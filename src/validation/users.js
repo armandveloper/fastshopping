@@ -46,14 +46,13 @@ exports.validarUsuario = [
 	(req, res, next) => {
 		const errores = validationResult(req);
 		if (!errores.isEmpty()) {
-			// res.locals.nombre = req.body.nombre ? req.body.nombre : '';
-			// res.locals.apellido = req.body.apellido ? req.body.apellido : '';
-			// res.locals.email = req.body.email ? req.body.email : '';
-			// res.locals.telefono = req.body.telefono ? req.body.telefono : '';
 			req.flash(
 				'feedbackError',
 				errores.array().map((error) => error.msg)
 			);
+			req.flash('usuario', {
+				...req.body,
+			});
 			return res.redirect('/registro');
 		}
 		next();

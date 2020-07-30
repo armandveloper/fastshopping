@@ -44,6 +44,11 @@ Usuario.init(
 		referencias: {
 			type: DataTypes.STRING(60),
 		},
+		urlAvatar: {
+			type: DataTypes.STRING,
+			default:
+				'https://res.cloudinary.com/dxmhr2agc/image/upload/v1596075793/fastshopping/profile/usuario_g6ovba.svg',
+		},
 	},
 	{
 		sequelize,
