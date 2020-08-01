@@ -29,6 +29,14 @@ body {
 		border-radius: 1rem;
 	}
 }
+.contenido .titulo {
+	font-size: 1.8rem;
+	margin-top: 0;
+	margin-bottom: 2rem;
+}
+.completar-configuracion {
+	text-align: center;
+}
 /*Este es para el estilo-index*/
 .area-btn {
 	margin-top: 60px;
@@ -73,7 +81,7 @@ body {
 .alerta-exito {
 	background: #00e676;
 }
-@media (min-width: 786px) {
+@media (min-width: 768px) {
 	.alerta {
 		font-size: 1rem;
 	}
@@ -253,6 +261,95 @@ input {
 		font-size: 1.15rem;
 	}
 }
+
+/* Configuración */
+.configuracion-usuario-top {
+	margin-bottom: 2.5rem;
+	text-align: center;
+}
+.contenedor-avatar {
+	margin-right: auto;
+	margin-bottom: 1.5rem;
+	margin-left: auto;
+}
+@media (min-width: 576px) {
+	.configuracion-usuario-top {
+		display: flex;
+		align-items: center;
+		text-align: left;
+	}
+	.contenedor-avatar {
+		margin-right: 2rem;
+		margin-bottom: 0;
+		margin-left: 0;
+	}
+}
+.configuracion-usuario .nombre {
+	font-size: 1.125rem;
+	font-weight: 500;
+	margin-top: 0;
+	margin-bottom: 0.625rem;
+}
+.configuracion-usuario .telefono {
+	margin: 0;
+}
+.contenedor-avatar {
+	height: 200px;
+	width: 200px;
+	position: relative;
+}
+.contenedor-avatar .spinner {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+}
+.contenedor-avatar .spinner.mostrar {
+	display: block;
+}
+.contenedor-avatar .avatar {
+	border-radius: 50%;
+	display: block;
+	height: 200px;
+	object-fit: cover;
+	width: 200px;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.contenedor-avatar .avatar.ocultar {
+	display: none;
+}
+.editar-avatar {
+	display: none;
+}
+.editar-avatar-boton {
+	background-color: rgb(36, 41, 46);
+	border-radius: 6px;
+	color: #fff;
+	cursor: pointer;
+	font-size: 0.875rem;
+	padding: 4px 8px;
+	display: inline-flex;
+	align-items: center;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+.editar-avatar-icono {
+	margin-right: 6px;
+}
 .contenedor-boton-actualizar-perfil {
 	text-align: center;
+}
+/*Notificaciones*/
+.show-notification {
+	width: 100%;
+}
+/*Historial de pedidos*/
+.history-pedidos {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }

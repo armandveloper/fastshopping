@@ -27,6 +27,9 @@ Usuario.init(
 			type: DataTypes.CHAR(10),
 			unique: true,
 		},
+		codigoPostal: {
+			type: DataTypes.CHAR(5),
+		},
 		colonia: {
 			type: DataTypes.STRING(45),
 		},
@@ -40,14 +43,19 @@ Usuario.init(
 		},
 		numInt: {
 			type: DataTypes.INTEGER,
+			defaultValue: 1,
 		},
 		referencias: {
 			type: DataTypes.STRING(60),
 		},
 		urlAvatar: {
 			type: DataTypes.STRING,
-			default:
+			defaultValue:
 				'https://res.cloudinary.com/dxmhr2agc/image/upload/v1596075793/fastshopping/profile/usuario_g6ovba.svg',
+		},
+		configuracionCompleta: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false,
 		},
 	},
 	{

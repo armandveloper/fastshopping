@@ -19,6 +19,11 @@ exports.validarPedido = [
 			isInt: true,
 			toInt: true,
 		},
+		'infoPedido.idReceptor': {
+			errorMessage: 'El pedido es incorrecto',
+			isInt: true,
+			toInt: true,
+		},
 		articulos: {
 			in: ['body'],
 			isArray: {

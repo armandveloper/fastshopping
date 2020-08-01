@@ -6,33 +6,26 @@ const {
 	obtenerUsuarioPorEmail,
 	actualizarUsuario,
 	actualizarAvatar,
+	mostrarInicio,
+	mostrarNotificaciones,
+	mostrarHistorial,
+	mostrarConfiguracion,
 } = require('../controllers/users.controller');
 
 const router = Router();
 
+router.get('/', estaAutenticado, mostrarInicio);
 router.post('/', validacion.validarUsuario, crearUsuario);
-router.put('/', actualizarUsuario);
-router.get('/', estaAutenticado, (req, res) => {
-	res.render('users/index', {
-		titulo: 'Bienvenido ' + res.locals.usuario.nombre,
-	});
-});
-// router.get('/', (req, res) => {
-// 	res.render('users/index', {
-// 		titulo: 'Bienvenido',
-// 	});
-// });
-router.get('/perfil', (req, res) => {
-	res.render('users/perfil', {
-		titulo: 'Perfil de fhfhf',
-	});
-});
+router.post('/actualizar', validacion.validarActualizacion, actualizarUsuario);
+router.get('/configuracion', estaAutenticado, mostrarConfiguracion);
+router.put('/avatar', estaAutenticado, actualizarAvatar);
+router.get('/notificaciones', mostrarNotificaciones);
+router.get('/historial', mostrarHistorial);
 router.get(
 	'/:email',
 	estaAutenticado,
-	validacion.validarEmail,
+	validacion.validarBusquedaUsuario,
 	obtenerUsuarioPorEmail
 );
-router.post('/imagen', actualizarAvatar);
 
 module.exports = router;

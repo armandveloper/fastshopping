@@ -1,0 +1,65 @@
+doctype html
+html(lang='es-MX')
+  include ../includes/head
+  body
+    include ../includes/navbar
+    include ../includes/messages
+    #contenido.contenido
+      .configuracion-usuario
+        .configuracion-usuario-top
+          .contenedor-avatar
+            svg#spinner.spinner(xmlns='http://www.w3.org/2000/svg', style='margin: auto; background: rgb(255, 255, 255); shape-rendering: auto;', width='200px', height='200px', viewBox='0 0 100 100', preserveAspectRatio='xMidYMid')
+              path(d='M10 50A40 40 0 0 0 90 50A40 42 0 0 1 10 50', fill='#1565c0', stroke='none')
+                animatetransform(attributeName='transform', type='rotate', dur='1s', repeatCount='indefinite', keyTimes='0;1', values='0 50 51;360 50 51')
+            img#avatar.avatar(src=usuario.urlAvatar, alt=`${usuario.nombre || ''}` width="60", height="60")
+            input#editar-avatar.editar-avatar(type="file", name="imagen", accept=".png,.svg,.jpg,.jpeg")
+            label.editar-avatar-boton(for="editar-avatar")
+              i.editar-avatar-icono.material-icons mode_edit
+              | Editar
+          div
+            p.nombre #{usuario.nombre} #{usuario.apellido}
+            p.telefono #{usuario.telefono}
+      h1.titulo Actualizar Perfil
+      form#formulario-perfil(action="/usuarios/actualizar", method="POST")
+        input(type="hidden", name="idUsuario", value=usuario.idUsuario, id="usuario-clave")
+        input(type="hidden", id="colonia-db", value=usuario.colonia)
+
+        .row
+          .input-field.col.s6
+            input#nombre.validate(name='nombre', type='text', value=`${usuario.nombre || ''}`, required)
+            label(for="nombre") Nombre
+          .input-field.col.s6
+            input#apellido.validate(name='apellido', type='text' value=`${usuario.apellido || ''}`, required)
+            label(for='apellido') Apellido 
+          .input-field.col.s6
+            input#email.validate(name="email", type="email", value=`${usuario.email || ''}`, required, disabled)
+            label(for="email") Email        
+          .input-field.col.s6
+            input#telefono.validate(name="telefono", type="tel", value=`${usuario.telefono || ''}`, required)
+            label(for='telefono') Numero de telefono
+          .input-field.col.s6
+            input#cod-postal.validate(name="codigoPostal", type="number", value=`${usuario.codigoPostal || ''}`, required)
+            label(for="cod-postal") Código Postal
+          .input-field.col.s6
+            select#colonia(name="colonia", required)
+              option(value="") elige una opción
+            label(for="colonia") Colonia
+          .input-field.col.s12.m4
+            input#calle.validate(name="calle", type="text", value=`${usuario.calle || ''}`, required)
+            label(for="calle") Calle
+          .input-field.col.s6.m4
+            input#numExt.validate(name="numExt", type="number", value=`${usuario.numExt || ''}`, required)
+            label(for="numExt") Numero Exterior
+          .input-field.col.s6.m4
+            input#numInt.validate(name="numInt", type="number", value=`${usuario.numInt || ''}`, required)
+            label(for="numInt") Numero Interior
+          .input-field.col.s12
+            input#referencias.validate(name="referencias", type="text", value=`${usuario.referencias || ''}`, required)
+            label(for="referencias") Referencias
+        .row
+        .contenedor-boton-actualizar-perfil
+          button.waves-effect.waves-light.btn.blue.darken-3 Actualizar perfil
+
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js', defer)
+    script(src="https://cdn.jsdelivr.net/npm/sweetalert2@9", defer)
+    script(src="/static/js/app.js", defer)

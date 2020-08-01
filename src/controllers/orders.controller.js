@@ -15,15 +15,7 @@ const actualizarEstado = async (idPedido) => {
 };
 
 exports.crearPedido = async (req, res) => {
-	// En el cuerpo de la petición debe recibir las propiedades
-	// articulos[]
-	// infoPedido: {
-	//  notas:
-	//  idCliente,
-	//
-	// }
 	const { articulos, infoPedido } = req.body;
-	// return res.status(201).json({ ok: true, articulos, infoPedido });
 	try {
 		const pedidoDB = await Pedido.create({
 			...infoPedido,

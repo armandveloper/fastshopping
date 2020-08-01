@@ -20,6 +20,7 @@ Pedido.init(
 			defaultValue: false,
 		},
 		idCliente: DataTypes.INTEGER,
+		idReceptor: DataTypes.INTEGER,
 	},
 	{
 		sequelize,

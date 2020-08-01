@@ -6,27 +6,31 @@ html(lang='es-MX')
     .container
       p.descripcion Llene el formulario para agregar un producto
     #contenido.contenido
-      form#productos-formulario
-        // Rellenado del producto
+      if ! usuario.configuracionCompleta
+        h1.titulo.completar-configuracion Para comenzar a solicitar pedidos termine de configurar su cuenta.
+          a(href="/usuarios/configuracion")  Completar configuración
+      else
+        form#productos-formulario
+          // Rellenado del producto
+          .row
+            .input-field.col.s12.m8
+              input#articulo.validate(type='text', name='articulo', required)
+              label(for='articulo') Nombre Producto
+            .input-field.col.s12.m4
+              input#cantidad.validate(type='number', name='cantidad', required min="1")
+              label(for='cantidad') Cantidad
+            p#cambio-envio-contenedor
+              label
+                input#cambio-envio-checkbox.filled-in(type="checkbox")
+                span ¿Quieres que alguien más reciba el pedido? (Quien recibe debe ser un usuario también)
+            button.waves-effect.waves-light.btn.green.accent-4 Agregar producto
+          input(type="hidden", value=usuario.idUsuario, id="usuario-clave")
+        ul#productos-lista.productos
         .row
-          .input-field.col.s12.m8
-            input#articulo.validate(type='text', name='articulo', required)
-            label(for='articulo') Nombre Producto
-          .input-field.col.s12.m4
-            input#cantidad.validate(type='number', name='cantidad', required min="1")
-            label(for='cantidad') Cantidad
-          p#cambio-envio-contenedor
-            label
-              input#cambio-envio-checkbox.filled-in(type="checkbox")
-              span ¿Quieres que alguien más reciba el pedido? (Quien recibe debe ser un usuario también)
-          button.waves-effect.waves-light.btn.green.accent-4 Agregar producto
-        input(type="hidden" value=usuario.idUsuario id="id-usuario")
-      ul#productos-lista.productos
-      .row
-        .input-field.col.s12
-          textarea#notas.materialize-textarea(name="notas")
-          label(for='notas') Agregue un comentario
-      button#boton-enviar-pedido.waves-effect.waves-light.btn.blue.darken-3 Realizar pedido
+          .input-field.col.s12
+            textarea#notas.materialize-textarea(name="notas")
+            label(for='notas') Agregue un comentario
+        button#boton-enviar-pedido.waves-effect.waves-light.btn.blue.darken-3 Realizar pedido
     script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js', defer)
     script(src="https://cdn.jsdelivr.net/npm/sweetalert2@9", defer)
     script(src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.1.0/uuidv4.min.js", defer)

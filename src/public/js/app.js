@@ -1,4 +1,8 @@
 let productos = [];
+let cambiarReceptorEnvio = false,
+	confirmarReceptorEnvio = false,
+	receptorEsValido = false,
+	idReceptor = document.getElementById('usuario-clave').value;
 
 // Función para verificar si existe un usuario según el email
 // Usada para la opción que cambia el receptor
@@ -9,17 +13,27 @@ async function buscarUsuario() {
 		return;
 	}
 	try {
-		const respuesta = await fetch(`/usuarios/${email}`);
+		const respuesta = await fetch(`/usuarios/${email}`, {
+			method: 'GET',
+			headers: {
+				idUsuarioEmisor: document.getElementById('usuario-clave').value,
+			},
+		});
 		const datos = await respuesta.json();
+		console.log(datos);
 		if (!datos.ok) {
 			throw new Error(datos.mensaje);
 		}
+		receptorEsValido = true;
+		idReceptor = datos.usuario.idUsuario;
 		const { nombre, apellido } = datos.usuario;
 		const recibeElem = document.createElement('p'),
 			confirmarReceptorContenedor = document.createElement('p');
+		confirmarReceptorContenedor.id = 'confirmar-receptor-contenedor';
+		recibeElem.id = 'datos-receptor';
 		confirmarReceptorContenedor.innerHTML = `
 			<label>
-				<input type="checkbox" class="filled-in" />
+				<input id="checkbox-confirmar-receptor" type="checkbox" class="filled-in" />
 				<span>Confirmar Receptor</span>
 			</label>
 		`;
@@ -31,6 +45,11 @@ async function buscarUsuario() {
 			'afterend',
 			confirmarReceptorContenedor
 		);
+		document
+			.getElementById('checkbox-confirmar-receptor')
+			.addEventListener('input', (e) => {
+				confirmarReceptorEnvio = e.target.checked;
+			});
 		console.log(datos.usuario);
 	} catch (err) {
 		console.log(err);
@@ -39,6 +58,8 @@ async function buscarUsuario() {
 			title: 'Algo salió mal',
 			text: err.message,
 		});
+		receptorEsValido = false;
+		idReceptor = document.getElementById('usuario-clave').value;
 	}
 }
 
@@ -81,8 +102,19 @@ function mostrarNuevaDireccion() {
 }
 
 // Realiza la petición al backend para crear un nuevo pedido
-async function enviarPedido() {
+async function solicitarPedido() {
+	if (cambiarReceptorEnvio && !receptorEsValido) {
+		Swal.fire(
+			'Para realizar el pedido, elija un receptor válido o desmarque la opción'
+		);
+		return;
+	}
+	if (cambiarReceptorEnvio && receptorEsValido && !confirmarReceptorEnvio) {
+		Swal.fire('Confirme que alguien más recibira el pedido');
+		return;
+	}
 	try {
+		let idCliente = document.getElementById('usuario-clave').value;
 		const respuesta = await fetch('/pedidos', {
 			method: 'POST',
 			headers: {
@@ -91,12 +123,14 @@ async function enviarPedido() {
 			body: JSON.stringify({
 				articulos: productos,
 				infoPedido: {
-					idCliente: document.getElementById('id-usuario').value,
+					idCliente,
+					idReceptor,
 					notas: document.getElementById('notas').value,
 				},
 			}),
 		});
 		const datos = await respuesta.json();
+		console.log(datos);
 		if (!datos.ok) {
 			const refContenido = document.getElementById('contenido');
 			datos.errores.forEach((error) => {
@@ -119,11 +153,30 @@ async function enviarPedido() {
 		productosFormulario.reset();
 		document.getElementById('notas').value = '';
 		productos = [];
+		const campoCorreo = document.getElementById('fila-campo-correo');
+		if (campoCorreo) {
+			campoCorreo.remove();
+		}
+		const confirmarReceptorContenedor = document.getElementById(
+			'confirmar-receptor-contenedor'
+		);
+		if (confirmarReceptorContenedor) {
+			confirmarReceptorContenedor.remove();
+		}
+		const recibeElem = document.getElementById('datos-receptor');
+		if (recibeElem) {
+			recibeElem.remove();
+		}
 		const productosLista = document.getElementById('productos-lista');
 		while (productosLista.lastChild) {
 			productosLista.removeChild(productosLista.lastChild);
 		}
-		console.log(productos);
+		// Reestablecer variables de control de receptor
+		cambiarReceptorEnvio = false;
+		confirmarReceptorEnvio = false;
+		receptorEsValido = false;
+		idReceptor = idCliente;
+		alternarBotonPedido();
 	} catch (err) {
 		Swal.fire({
 			icon: 'error',
@@ -185,6 +238,92 @@ function agregarProducto(e) {
 	);
 	alternarBotonPedido();
 }
+
+async function actualizarImagenPerfil() {
+	const formData = new FormData();
+	formData.append('imagen', editarAvatarInput.files[0]);
+	formData.append(
+		'idUsuario',
+		document.getElementById('usuario-clave').value
+	);
+	try {
+		const avatar = document.getElementById('avatar'),
+			spinner = document.getElementById('spinner');
+		avatar.classList.add('ocultar');
+		spinner.classList.add('mostrar');
+		const respuesta = await fetch('/usuarios/avatar', {
+			method: 'PUT',
+			body: formData,
+		});
+		const datos = await respuesta.json();
+		if (!datos.ok) {
+			throw new Error(datos.error);
+		}
+		const imagen = new Image(200, 200);
+		imagen.onload = () => {
+			avatar.src = imagen.src;
+			spinner.classList.remove('mostrar');
+			avatar.classList.remove('ocultar');
+		};
+		imagen.src = datos.urlImagen;
+	} catch (err) {
+		console.log(err);
+		Swal.fire({
+			icon: 'error',
+			title: 'Algo salió mal',
+			text:
+				'Ocurrió un problema al actualizar su perfil. Por favor intente más tarde',
+		});
+		spinner.classList.remove('mostrar');
+		avatar.classList.remove('ocultar');
+	}
+}
+
+async function obtenerColonias(codigoPostal) {
+	const select = document.getElementById('colonia');
+	var elems = document.querySelectorAll('select');
+	try {
+		const respuesta = await fetch(
+			`https://api-sepomex.hckdrk.mx/query/get_colonia_por_cp/${codigoPostal}`
+		);
+		const datos = await respuesta.json();
+		if (datos.error) {
+			throw new Error(datos.error_message);
+		}
+		while (select.lastChild) {
+			select.removeChild(select.lastChild);
+		}
+		const coloniaDB = document.getElementById('colonia-db').value;
+		const opcionPredeterminada = document.createElement('option');
+		opcionPredeterminada.value = '';
+		opcionPredeterminada.innerText = 'elige una opción';
+		select.appendChild(opcionPredeterminada);
+		datos.response.colonia.forEach((colonia) => {
+			const opcion = document.createElement('option');
+			opcion.value = colonia;
+			opcion.innerText = colonia;
+			if (colonia === coloniaDB) {
+				opcion.selected = true;
+			}
+			select.appendChild(opcion);
+		});
+		select.disabled = false;
+		M.FormSelect.init(elems);
+		console.log(datos);
+	} catch (err) {
+		Swal.fire({
+			icon: 'error',
+			title: 'Algo salió mal',
+			text:
+				'Tuvimos un problema al procesar el Código Postal. Por favor intente de nuevo',
+		});
+		select.disabled = true;
+		M.FormSelect.init(elems);
+	}
+}
+
+// Referencias del DOM
+
 const productosFormulario = document.getElementById('productos-formulario');
 const botonEnviarPedido = document.getElementById('boton-enviar-pedido');
 const cambioEnvioCheckbox = document.getElementById('cambio-envio-checkbox');
@@ -193,16 +332,62 @@ if (productosFormulario) {
 	alternarBotonPedido();
 }
 if (botonEnviarPedido) {
-	botonEnviarPedido.addEventListener('click', enviarPedido);
+	botonEnviarPedido.addEventListener('click', solicitarPedido);
 }
 // Elemento para cambiar receptor de pedido
 if (cambioEnvioCheckbox) {
 	cambioEnvioCheckbox.addEventListener('change', () => {
-		console.log(cambioEnvioCheckbox.checked);
 		if (cambioEnvioCheckbox.checked) {
+			cambiarReceptorEnvio = true;
 			mostrarNuevaDireccion();
 		} else {
+			cambiarReceptorEnvio = false;
 			ocultarNuevaDireccion();
 		}
 	});
 }
+
+const editarAvatarInput = document.getElementById('editar-avatar');
+if (editarAvatarInput) {
+	console.log('Agregando listener');
+	editarAvatarInput.addEventListener('change', (e) => {
+		let lector = new FileReader();
+		lector.readAsDataURL(e.target.files[0]);
+		lector.onload = () => {
+			Swal.fire({
+				text: 'Así se verá tu imagen de perfl',
+				imageUrl: lector.result,
+				imageWidth: 200,
+				imageHeight: 200,
+				imageAlt: 'Imagen de perfil',
+				confirmButtonText: 'Establecer como imagen de perfil',
+				confirmButtonColor: '#1565C0',
+				showCloseButton: true,
+			}).then((resultado) => {
+				if (resultado.value) {
+					actualizarImagenPerfil();
+				}
+			});
+			console.log(lector.result);
+		};
+	});
+}
+
+const codigoPostalInput = document.getElementById('cod-postal');
+if (codigoPostalInput) {
+	codigoPostalInput.addEventListener('change', (e) =>
+		obtenerColonias(e.target.value)
+	);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+	var elems = document.querySelectorAll('select');
+	M.FormSelect.init(elems);
+	if (location.pathname.includes('configuracion')) {
+		console.log('COnsiguiendo');
+		const codigoPostal = document.getElementById('cod-postal').value;
+		if (codigoPostal) {
+			obtenerColonias(codigoPostal);
+		}
+	}
+});
