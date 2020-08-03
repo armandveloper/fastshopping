@@ -1,0 +1,41 @@
+doctype html
+html(lang="es-MX")
+  include ../includes/head.pug
+  include ../includes/navbar-admin.pug
+  body
+  #contenido.contenido
+    h4 Historial de pedidos.
+    hr
+    .htry-select
+      p Pedido uno
+      .row.valign-wrapper
+        .col.s10.htry-list
+          li Huevos
+          li Jamon
+          li Carne
+        .col.s2
+          i.material-icons.htry-icon-next navigate_next
+    hr
+    .htry-select
+      p Pedido dos
+      .row.valign-wrapper
+        .col.s10.htry-list
+          li Tomates
+          li Leche
+          li Aceite
+        .col.s2
+          i.material-icons.htry-icon-next navigate_next
+    hr
+    .htry-select
+      p Pedido tres
+      .row.valign-wrapper
+        .col.s10.htry-list
+          li Arroz
+          li Verduras
+          li Azucar
+        .col.s2
+          i.material-icons.htry-icon-next navigate_next
+    
+
+
+script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js', defer)

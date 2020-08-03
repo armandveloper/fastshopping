@@ -146,8 +146,8 @@ async function solicitarPedido() {
 		}
 		// El pedido se crea, y limpia el formulario así como elimina el carrito
 		Swal.fire(
-			'Pedido recibido',
-			'Hemos recibido su pedido, en breve lo atenderemos',
+			'Pedido realizado',
+			'Hemos recibido su solicitud de pedido, en breve lo atenderemos',
 			'success'
 		);
 		productosFormulario.reset();
@@ -349,7 +349,6 @@ if (cambioEnvioCheckbox) {
 
 const editarAvatarInput = document.getElementById('editar-avatar');
 if (editarAvatarInput) {
-	console.log('Agregando listener');
 	editarAvatarInput.addEventListener('change', (e) => {
 		let lector = new FileReader();
 		lector.readAsDataURL(e.target.files[0]);
@@ -368,7 +367,6 @@ if (editarAvatarInput) {
 					actualizarImagenPerfil();
 				}
 			});
-			console.log(lector.result);
 		};
 	});
 }
@@ -384,10 +382,119 @@ document.addEventListener('DOMContentLoaded', function () {
 	var elems = document.querySelectorAll('select');
 	M.FormSelect.init(elems);
 	if (location.pathname.includes('configuracion')) {
-		console.log('COnsiguiendo');
 		const codigoPostal = document.getElementById('cod-postal').value;
 		if (codigoPostal) {
 			obtenerColonias(codigoPostal);
 		}
 	}
+	if (botonActivarNotificaciones) {
+		if (Notification.permission === 'granted') {
+			botonActivarNotificaciones.disabled = true;
+		}
+	}
 });
+
+// Notificaciones
+const botonActivarNotificaciones = document.getElementById(
+	'boton-habilitar-notificaciones'
+);
+if (botonActivarNotificaciones) {
+	botonActivarNotificaciones.addEventListener('click', (e) => {
+		Notification.requestPermission().then(async (resultado) => {
+			if (resultado === 'granted') {
+				const clave = await obtenerClaveSuscripcion();
+				const suscripcionRespuesta = await swRegistro.pushManager.subscribe(
+					{
+						userVisibleOnly: true,
+						applicationServerKey: clave,
+					}
+				);
+				const suscripcion = await suscripcionRespuesta.toJSON();
+				try {
+					const respuesta = await fetch(
+						'/api/subscription/subscribe',
+						{
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json',
+								idUsuario: idReceptor,
+							},
+							body: JSON.stringify(suscripcion),
+						}
+					);
+					const datos = await respuesta.json();
+					if (!datos.ok) {
+						throw new Error(datos.mensaje);
+					}
+					Swal.fire(
+						'Se ha suscrito a las notificaciones. Ahora podrá recibir alertas sobre el estado de su pedido'
+					);
+					e.target.disabled = true;
+					console.log(datos.suscripcion);
+				} catch (err) {
+					console.log(err);
+					Swal.fire({
+						icon: 'error',
+						title: 'Algo salió mal',
+						text: err.message,
+					});
+				}
+			}
+		});
+	});
+}
+
+function verificarSuscripcion(estado) {
+	console.log(estado);
+}
+
+// Socket.io
+const socket = io('/' + idReceptor);
+
+socket.on('pagoActualizado', (datos) => {
+	console.log(datos);
+	// const audio = new Audio('/static/audio/notification.mp3');
+	// audio.play();
+	// const notif = new Notification('Compra realizada', {
+	// 	body:
+	// 		'Nuestros repartidores han realizado su compra el total a pagar es: ' +
+	// 		datos.total,
+	// 	icon: '/static/img/favicons/favicon.ico',
+	// });
+	document
+		.getElementById('tab-notificacion')
+		.classList.add('nueva-notificacion');
+});
+
+// Notificaciones
+async function obtenerClaveSuscripcion() {
+	try {
+		const respuesta = await fetch('/api/subscription/key');
+		const clave = await respuesta.arrayBuffer();
+		return new Uint8Array(clave);
+	} catch (err) {
+		console.log(err);
+	}
+}
+
+let swRegistro;
+if (navigator.serviceWorker) {
+	// async function obtenerEstadoSuscripcion() {
+	// 	const suscripcion = await swRegistro.pushManager.subscribe({
+	// 		userVisibleOnly: true,
+	// 		// applicationServerKey:
+	// 	});
+	// }
+	window.addEventListener('load', () => {
+		navigator.serviceWorker
+			.register('/static/sw.js', {
+				scope: '/static/',
+			})
+			.then((registro) => {
+				swRegistro = registro;
+				swRegistro.pushManager
+					.getSubscription()
+					.then(verificarSuscripcion);
+			});
+	});
+}

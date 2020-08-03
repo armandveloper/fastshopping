@@ -1,5 +1,7 @@
 const Pedido = require('../models/Order');
 const Articulo = require('../models/Item');
+const socket = require('../realtime/client');
+const { enviarNotificacion } = require('./notifications.controller');
 
 const actualizarImporte = async (idPedido, importe) => {
 	const pedido = await Pedido.findByPk(idPedido);
@@ -100,6 +102,17 @@ exports.actualizarPedido = async (req, res) => {
 				idPedido,
 				Number(req.body.importe)
 			);
+			socket.emit('pagoActualizado', {
+				importe: pedido.importe,
+				total: pedido.total,
+				idCliente: pedido.idCliente,
+			});
+			await enviarNotificacion(pedido.idCliente, {
+				titulo: 'Compra realizada',
+				texto:
+					'Nuestros repartidores han realizado su compra, el total a pagar es: $' +
+					pedido.total,
+			});
 			res.json({
 				ok: true,
 				pedido,

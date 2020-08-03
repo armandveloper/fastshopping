@@ -6,6 +6,7 @@ const app = require('./server');
 require('./models/User');
 require('./models/Item');
 require('./models/Order');
+require('./models/Subscription');
 async function main() {
 	try {
 		await sequelize.sync();

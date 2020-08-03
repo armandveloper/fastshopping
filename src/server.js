@@ -7,6 +7,7 @@ const passport = require('passport');
 const { nanoid } = require('nanoid');
 
 const app = express();
+const servidor = require('http').createServer(app);
 
 require('./config/passport');
 
@@ -23,13 +24,12 @@ const almacen = multer.diskStorage({
 	},
 });
 app.use(multer({ storage: almacen }).single('imagen'));
-app.use(
-	session({
-		secret: 'clave_secreta',
-		resave: false,
-		saveUninitialized: false,
-	})
-);
+const sessionMiddleware = session({
+	secret: 'clave_secreta',
+	resave: false,
+	saveUninitialized: false,
+});
+app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
@@ -42,4 +42,79 @@ app.use((req, res, next) => {
 });
 app.use(require('./routes/index.routes'));
 
-module.exports = app;
+const io = require('socket.io')(servidor);
+
+const workspaces = io.of(/^\/\w+$/);
+
+const wrap = (middleware) => (socket, next) =>
+	middleware(socket.request, {}, next);
+
+workspaces.use(wrap(sessionMiddleware));
+workspaces.use(wrap(passport.initialize()));
+workspaces.use(wrap(passport.session()));
+
+workspaces.use((socket, next) => {
+	if (socket.request.user || socket.nsp.name === '/nodejs') {
+		next();
+	} else {
+		next(new Error('No autorizado'));
+	}
+});
+workspaces.on('connection', (socket) => {
+	const workspace = socket.nsp;
+	console.log('Nueva conexión');
+	console.log(workspace.name);
+	socket.on('pagoActualizado', (datos) => {
+		console.log(socket.nsp.name);
+		console.log(datos);
+		io.of('/' + datos.idCliente).emit('pagoActualizado', datos);
+	});
+	// if (workspace.name === '/nodejs') {
+	// 	console.log('Conexion de server');
+	// 	workspace.on('pagoActualizado', (datos) => {
+	// 		console.log(datos);
+	// 		io.of('/' + datos.idCliente).emit('pagoActualizado', datos);
+	// 	});
+	// }
+	// workspace.on('pagoActualizado', (datos) => {
+	// 	io.of(workspace.name).emit('pagoActualizado', datos);
+	// });
+});
+
+// io.on('connect', (socket) => {
+// 	socket.on('pagoActualizado', (datos) => {
+// 		console.log(datos);
+// 	});
+// });
+
+// io.on('connect', (socket) => {
+// 	console.log('Nueva conexión a namespace default');
+// });
+
+// io.on('connect', (socket) => {
+// 	console.log(`new connection ${socket.id}`);
+// 	const session = socket.request.session;
+// 	console.log(`saving sid ${socket.id} in session ${session.id}`);
+// 	session.socketId = socket.id;
+// 	session.save();
+// 	const { user: usuario } = socket.request;
+// 	console.log(usuario);
+// 	socket.on('pagoActualizado', (datos) => {
+//     console.log(datos);
+//     socket.to()
+
+//   });
+//   io.
+// 	if (usuario) {
+// 		io.to(socket.id).emit(
+// 			'saludar',
+// 			'Hola ' + usuario.nombre + usuario.apellido
+// 		);
+// 	}
+
+// 	// socket.emit('saludar', 'Hello everyone');
+// });
+
+require('./realtime/client');
+
+module.exports = servidor;

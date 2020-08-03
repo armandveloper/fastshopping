@@ -5,26 +5,53 @@ html(lang='es-MX')
     include ../includes/navbar
 
     #contenido.contenido
-        .row
-            .col.s8
-                h3 Historial de compras
-            .col.s12
-                hr
-            .col.s4
-                a.waves-effect.waves-light.btn.blue.darken-3(href="#") Ultimo mes
-            .col.s12
-                .history-pedidos.row
-                    img.col.s2(src="/static/img/history-icon.svg") 
-                    .col.s3 
-                        p Compra finalizada 10/06/20
-                        li Frijoles
-                        li Arroz
-                        li ...
-                    a.col.s1(href="#")
-                        i.material-icons navigate_next
-                    
+            h3 Historial de compras.
+            hr
+            a.waves-effect.waves-light.btn.blue.darken-3(href="#") Ultimo mes                   
+            
+            .row
+                .col.m6.s12.htry-select
+                    p.color-text-noentregado Pedido en proceso
+                    .row.valign-wrapper
+                        .col.s10.htry-list
+                            li Laptop de 3000 pesos
+                            li Mica 9D para Redmi Note 8 dual
+                            li Funda uso rudo para Redmi Note 8 dual
+                        .col.s2
+                            i.material-icons.htry-icon-next navigate_next
+                    hr
+                .col.m6.s12.htry-select
+                    p.color-text-entregado Entregado 12/07/20
+                    .row.valign-wrapper
+                        .col.s10.htry-list
+                            li Redmi Note 8 dual
+                            li Mica 9D para Redmi Note 8 dual
+                            li Funda uso rudo para Redmi Note 8 dual
+                        .col.s2
+                            i.material-icons.htry-icon-next navigate_next
+                    hr
+                .col.m6.s12.htry-select
+                    p.color-text-entregado Entregado 15/07/20
+                    .row.valign-wrapper
+                        .col.s10.htry-list
+                            li Redmi Note 8 dual
+                            li Mica 9D para Redmi Note 8 dual
+                            li Funda uso rudo para Redmi Note
+                        .col.s2
+                            i.material-icons.htry-icon-next navigate_next
+                    hr
+                .col.m6.s12.htry-select
+                    p.color-text-entregado Entregado 31/07/20
+                    .row.valign-wrapper
+                        .col.s10.htry-list
+                            li Redmi Note 8 dual
+                            li Mica 9D para Redmi Note 8 dual
+                            li Funda uso rudo para Redmi Note dual
+                        .col.s2
+                            i.material-icons.htry-icon-next navigate_next
+                    hr
                 
-                p Aún no ha realizado pedidos 
-                a(href="../usuarios") ¿Desea realizar alguno?
+            p Aún no ha realizado pedidos
+            a(href="../usuarios") ¿Desea realizar alguno?
     
     script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js', defer)  
