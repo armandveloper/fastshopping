@@ -11,5 +11,6 @@ router.use('/pedidos', estaAutenticado, require('./orders.routes'));
 router.use('/admin', require('./admin.routes'));
 router.use('/repartidores', require('./deliverers.routes'));
 router.use('/api/subscription', require('./subscription.routes'));
+router.use('/notificaciones', require('./notifications.routes'));
 
 module.exports = router;

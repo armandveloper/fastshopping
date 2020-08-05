@@ -1,7 +1,11 @@
+const moment = require('moment');
 const Pedido = require('../models/Order');
 const Articulo = require('../models/Item');
+const Usuario = require('../models/User');
 const socket = require('../realtime/client');
 const { enviarNotificacion } = require('./notifications.controller');
+
+moment.locale('es');
 
 const actualizarImporte = async (idPedido, importe) => {
 	const pedido = await Pedido.findByPk(idPedido);
@@ -44,53 +48,104 @@ exports.crearPedido = async (req, res) => {
 	}
 };
 
-exports.obtenerPedidos = async (req, res) => {
+// Obtener todos los pedidos
+// exports.obtenerPedidos = async (req, res) => {
+// 	try {
+// 		const pedidos = await Pedido.findAll();
+// 		const pedidosConArticulos = await Promise.all(
+// 			pedidos.map(async (pedido) => {
+// 				const articulos = await Articulo.findAll({
+// 					where: {
+// 						idPedido: pedido.idPedido,
+// 					},
+// 				});
+// 				return { info: pedido, articulos };
+// 			})
+// 		);
+// 		res.json({ ok: true, pedidos: pedidosConArticulos });
+// 	} catch (err) {
+// 		console.log(err);
+// 		res.json({ ok: false, mensaje: 'Error inesperado' });
+// 	}
+// };
+
+// Obtener pedidos pendientes
+
+exports.obtenerPedidos = async () => {
 	try {
-		const pedidos = await Pedido.findAll();
+		const pedidos = await Pedido.findAll({ where: { enProceso: false } });
 		const pedidosConArticulos = await Promise.all(
 			pedidos.map(async (pedido) => {
+				let creadoEl = moment(pedido.creadoEl, 'YYYYMMDD').fromNow();
 				const articulos = await Articulo.findAll({
 					where: {
 						idPedido: pedido.idPedido,
 					},
 				});
-				return { info: pedido, articulos };
+				const cliente = await Usuario.findOne({
+					where: {
+						idUsuario: pedido.idReceptor,
+					},
+					attributes: { exclude: ['password'] },
+				});
+				return { creadoEl, info: pedido, articulos, cliente };
 			})
 		);
-		res.json({ ok: true, pedidos: pedidosConArticulos });
+		return pedidosConArticulos;
 	} catch (err) {
-		console.log(err);
-		res.json({ ok: false, mensaje: 'Error inesperado' });
+		throw new Error(err.message);
 	}
 };
 
-exports.obtenerPedido = async (req, res) => {
-	const { id } = req.params;
+// exports.obtenerPedido = async (req, res) => {
+// 	const { id } = req.params;
+// 	try {
+// 		const pedido = await Pedido.findOne({
+// 			where: {
+// 				idPedido: id,
+// 			},
+// 		});
+// 		if (!pedido) {
+// 			return res.json({ ok: true, mensaje: 'El pedido no existe' });
+// 		}
+// 		const articulos = await Articulo.findAll({
+// 			where: {
+// 				idPedido: pedido.idPedido,
+// 			},
+// 		});
+
+// 		res.json({
+// 			ok: true,
+// 			pedido: {
+// 				info: pedido,
+// 				articulos,
+// 			},
+// 		});
+// 	} catch (err) {
+// 		console.log(err);
+// 		res.json({ ok: false, mensaje: 'Error inesperado' });
+// 	}
+// };
+
+exports.obtenerPedido = async (idPedido) => {
 	try {
-		const pedido = await Pedido.findOne({
-			where: {
-				idPedido: id,
-			},
+		const pedido = await Pedido.findByPk(idPedido, {
+			include: Articulo,
 		});
 		if (!pedido) {
-			return res.json({ ok: true, mensaje: 'El pedido no existe' });
+			throw new Error('El pedido no existe');
 		}
-		const articulos = await Articulo.findAll({
-			where: {
-				idPedido: pedido.idPedido,
+		pedido.enProceso = true;
+		await pedido.save();
+		const cliente = await Usuario.findByPk(pedido.idReceptor, {
+			attributes: {
+				exclude: ['password'],
 			},
 		});
-
-		res.json({
-			ok: true,
-			pedido: {
-				info: pedido,
-				articulos,
-			},
-		});
+		let creadoEl = moment(pedido.creadoEl, 'YYYYMMDD').fromNow();
+		return { pedido, cliente, creadoEl };
 	} catch (err) {
-		console.log(err);
-		res.json({ ok: false, mensaje: 'Error inesperado' });
+		throw new Error(err.message);
 	}
 };
 
@@ -102,17 +157,24 @@ exports.actualizarPedido = async (req, res) => {
 				idPedido,
 				Number(req.body.importe)
 			);
+			let idNotificacion = await enviarNotificacion(pedido.idUsuario, {
+				titulo: 'Pedido en camino',
+				texto: `Nuestros repartidores han realizado su compra, la cual tiene un monto de $${pedido.total}. En breve recibirá su pedido`,
+			});
+			console.log('Emitiendo evento');
 			socket.emit('pagoActualizado', {
+				actualizadoEl: moment(
+					pedido.actualizadoEl,
+					'YYYYMMDD'
+				).fromNow(),
 				importe: pedido.importe,
 				total: pedido.total,
-				idCliente: pedido.idCliente,
+				idCliente: pedido.idUsuario,
+				idNotificacion,
+				titulo: 'Pedido en camino',
+				texto: `Nuestros repartidores han realizado su compra, la cual tiene un monto de $${pedido.total}. En breve recibirá su pedido`,
 			});
-			await enviarNotificacion(pedido.idCliente, {
-				titulo: 'Compra realizada',
-				texto:
-					'Nuestros repartidores han realizado su compra, el total a pagar es: $' +
-					pedido.total,
-			});
+			console.log('Evento enviado');
 			res.json({
 				ok: true,
 				pedido,

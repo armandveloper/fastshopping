@@ -1,5 +1,5 @@
-exports.mostrarLoginAdmin = (req, res) => {
-	res.render('auth/admin-login', {
-		titulo: 'Iniciar sesión',
+exports.mostrarInicio = (req, res) => {
+	res.render('admin/index', {
+		titulo: 'Panel de administracion | FastShopping',
 	});
 };

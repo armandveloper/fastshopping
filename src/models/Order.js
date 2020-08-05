@@ -1,5 +1,6 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/db');
+const Usuario = require('./User');
 const Articulo = require('./Item');
 
 class Pedido extends Model {}
@@ -19,7 +20,10 @@ Pedido.init(
 			type: DataTypes.BOOLEAN,
 			defaultValue: false,
 		},
-		idCliente: DataTypes.INTEGER,
+		enProceso: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false,
+		},
 		idReceptor: DataTypes.INTEGER,
 	},
 	{
@@ -33,6 +37,11 @@ Pedido.init(
 
 Pedido.hasMany(Articulo, {
 	foreignKey: 'idPedido',
+	onDelete: 'CASCADE',
+	onUpdate: 'CASCADE',
+});
+Pedido.belongsTo(Usuario, {
+	foreignKey: 'idUsuario',
 	onDelete: 'CASCADE',
 	onUpdate: 'CASCADE',
 });

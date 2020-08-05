@@ -1,41 +1,37 @@
 doctype html
 html(lang="es-MX")
   include ../includes/head.pug
-  include ../includes/navbar-admin.pug
   body
-  #contenido.contenido
-    h4 Historial de pedidos.
-    hr
-    .htry-select
-      p Pedido uno
-      .row.valign-wrapper
-        .col.s10.htry-list
-          li Huevos
-          li Jamon
-          li Carne
-        .col.s2
-          i.material-icons.htry-icon-next navigate_next
-    hr
-    .htry-select
-      p Pedido dos
-      .row.valign-wrapper
-        .col.s10.htry-list
-          li Tomates
-          li Leche
-          li Aceite
-        .col.s2
-          i.material-icons.htry-icon-next navigate_next
-    hr
-    .htry-select
-      p Pedido tres
-      .row.valign-wrapper
-        .col.s10.htry-list
-          li Arroz
-          li Verduras
-          li Azucar
-        .col.s2
-          i.material-icons.htry-icon-next navigate_next
-    
-
-
-script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js', defer)
+    include ../includes/navbar-deliverers.pug
+    #contenido.contenido
+      h4 Pedidos Pendientes
+      hr
+      if errorPedidos
+        p.error= errorPedidos
+      else 
+        if pedidos.length === 0
+          p !No hay pedidos por hacer!
+        else
+          each pedido in pedidos
+            - let { info, articulos, cliente } = pedido
+            - let articulosMostrar = articulos.length > 3 ? articulos.slice(0, 3) : articulos
+            .htry-select
+              .row
+                .col.s12
+                  p.creado-hace= pedido.creadoEl
+                .col.s12
+                  p.direccion-pedido Col. #{cliente.colonia} calle #{cliente.calle}
+              .row.valign-wrapper
+                .col.s10.htry-list
+                  each articulo in articulosMostrar
+                    li #{articulo.descripcion}. Cantidad: #{articulo.cantidad}
+                  if articulos.length > 3
+                    span Ver más
+                .col.s2
+                  i.material-icons.htry-icon-next navigate_next
+              .row
+                .col.s12
+                  a.waves-effect.waves-light.btn.blue.darken-3(href=`/repartidores/detalles/${info.idPedido}`, target="_blank", rel="noopener noreferrer") Atender pedido
+            hr
+      
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js', defer)

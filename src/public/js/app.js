@@ -1,3 +1,4 @@
+let swRegistro;
 let productos = [];
 let cambiarReceptorEnvio = false,
 	confirmarReceptorEnvio = false,
@@ -123,7 +124,7 @@ async function solicitarPedido() {
 			body: JSON.stringify({
 				articulos: productos,
 				infoPedido: {
-					idCliente,
+					idUsuario: idCliente,
 					idReceptor,
 					notas: document.getElementById('notas').value,
 				},
@@ -402,6 +403,10 @@ if (botonActivarNotificaciones) {
 	botonActivarNotificaciones.addEventListener('click', (e) => {
 		Notification.requestPermission().then(async (resultado) => {
 			if (resultado === 'granted') {
+				if (!navigator.serviceWorker) {
+					e.target.disabled = true;
+					return;
+				}
 				const clave = await obtenerClaveSuscripcion();
 				const suscripcionRespuesta = await swRegistro.pushManager.subscribe(
 					{
@@ -444,29 +449,118 @@ if (botonActivarNotificaciones) {
 	});
 }
 
+const botonesDescartarNotificacion = document.querySelectorAll(
+	'.boton-descartar-notificacion'
+);
+if (botonesDescartarNotificacion) {
+	botonesDescartarNotificacion.forEach((boton) => {
+		boton.addEventListener('click', descartarNotificacion);
+	});
+}
+
 function verificarSuscripcion(estado) {
 	console.log(estado);
 }
 
 // Socket.io
-const socket = io('/' + idReceptor);
+if (window.io) {
+	const socket = io('/' + idReceptor);
 
-socket.on('pagoActualizado', (datos) => {
-	console.log(datos);
-	// const audio = new Audio('/static/audio/notification.mp3');
-	// audio.play();
-	// const notif = new Notification('Compra realizada', {
-	// 	body:
-	// 		'Nuestros repartidores han realizado su compra el total a pagar es: ' +
-	// 		datos.total,
-	// 	icon: '/static/img/favicons/favicon.ico',
-	// });
-	document
-		.getElementById('tab-notificacion')
-		.classList.add('nueva-notificacion');
-});
+	socket.on('pagoActualizado', (datos) => {
+		console.log(datos);
+		// if (!navigator.serviceWorker) {
+		const audio = new Audio('/static/audio/notification.mp3');
+		audio.play();
+		mostrarNotificacion(datos);
+		// }
+		document
+			.getElementById('tab-notificacion')
+			.classList.add('nueva-notificacion');
+		if (location.pathname.includes('notificaciones')) {
+			const sinNotificacionesTexto = document.getElementById(
+				'sin-notificaciones'
+			);
+			if (sinNotificacionesTexto) {
+				sinNotificacionesTexto.remove();
+			}
+			mostrarTarjetaNotificacion(datos);
+		}
+	});
+}
 
 // Notificaciones
+
+function mostrarNotificacion({ texto, titulo }) {
+	new Notification(titulo, {
+		body: texto,
+		icon: '/static/img/favicons/favicon.ico',
+	});
+}
+
+function mostrarTarjetaNotificacion({
+	texto,
+	titulo,
+	actualizadoEl,
+	idNotificacion,
+}) {
+	let claseIcono =
+			titulo !== 'Pedido Entregado'
+				? 'icon-check-progress'
+				: 'icono-check',
+		nombreIcono =
+			claseIcono === 'icon-check-progress' ? 'cached' : 'verified',
+		claseEncabezado =
+			titulo !== 'Pedido Entregado'
+				? 'content-encabezado-process'
+				: 'content-encabezado-listo';
+
+	const contenedorNotificacion = document.createElement('div');
+	contenedorNotificacion.className = 'col m6 list-notification';
+	contenedorNotificacion.innerHTML = `
+  <input class="id-notificacion" type="hidden" value="${idNotificacion}">
+  <div class="row valign-wrapper">
+    <div class="col s2">
+      <i class="material-icons ${claseIcono}">${nombreIcono}</i>
+    </div>
+    <div class="col s10">
+      <div class="col s12 valign-wrapper">
+        <p>${actualizadoEl}</p>
+      </div>
+      <div class="col s12 ${claseEncabezado}">
+        <p>${titulo}</p>
+      </div>
+      <div class="col s12">
+        <p class="content-pedido">${texto}</p>
+      </div>
+      <button class="boton-descartar-notificacion waves-effect waves-teal btn-flat red-text">Descartar</button>
+    </div>
+  </div>
+  `;
+	const listaNotificaciones = document.getElementById('lista-notificaciones');
+	if (listaNotificaciones.childElementCount === 0) {
+		listaNotificaciones.appendChild(contenedorNotificacion);
+	} else {
+		listaNotificaciones.children[0].insertAdjacentElement(
+			'beforebegin',
+			contenedorNotificacion
+		);
+	}
+	document
+		.querySelector('.boton-descartar-notificacion')
+		.addEventListener('click', descartarNotificacion);
+}
+
+async function descartarNotificacion(e) {
+	const idNotificacion =
+		e.target.parentElement.parentElement.previousElementSibling.value;
+	e.target.parentElement.parentElement.parentElement.remove();
+	const respuesta = await fetch('/notificaciones/' + idNotificacion, {
+		method: 'PUT',
+	});
+	const datos = await respuesta.json();
+	console.log(datos);
+}
+
 async function obtenerClaveSuscripcion() {
 	try {
 		const respuesta = await fetch('/api/subscription/key');
@@ -477,14 +571,7 @@ async function obtenerClaveSuscripcion() {
 	}
 }
 
-let swRegistro;
 if (navigator.serviceWorker) {
-	// async function obtenerEstadoSuscripcion() {
-	// 	const suscripcion = await swRegistro.pushManager.subscribe({
-	// 		userVisibleOnly: true,
-	// 		// applicationServerKey:
-	// 	});
-	// }
 	window.addEventListener('load', () => {
 		navigator.serviceWorker
 			.register('/static/sw.js', {

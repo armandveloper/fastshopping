@@ -3,10 +3,44 @@ html(lang='es-MX')
   include ../includes/head
   body
     include ../includes/navbar
-
     #contenido.contenido
       h3 Notificaciones
-        hr
-      .show-notification
+      input(type="hidden", value=usuario.idUsuario, id="usuario-clave")
+      hr
+      if notificacionError
+        p= notificacionError
+      else
+        #lista-notificaciones.row
+          each notificacionInfo in notificaciones
+              - let { notificacion, creadoEl } = notificacionInfo
+              .col.m6.list-notification
+                input.id-notificacion(type="hidden", value=notificacion.idNotificacion)
+                .row.valign-wrapper
+                  .col.s2
+                    if notificacion.titulo !== 'Pedido entregado'
+                      i.material-icons.icon-check-progress cached
+                    else
+                      i.material-icons.icono-check verified
+                  .col.s10
+                    if notificacion.titulo !== 'Pedido entregado'
+                      .col.s12.valign-wrapper
+                        p= creadoEl
+                      .col.s12.content-encabezado-process
+                        p= notificacion.titulo
+                      .col.s12
+                        p.content-pedido #{notificacion.contenido}
+                    else
+                      .col.s12.valign-wrapper
+                        p= creadoEl
+                      .col.s12.content-encabezado-listo
+                        p= notificacion.titulo
+                      .col.s12
+                        p.content-pedido #{notificacion.contenido}
+                    button.boton-descartar-notificacion.waves-effect.waves-teal.btn-flat.red-text Descartar
+          else
+            p#sin-notificaciones No hay notificaciones para mostrar
 
-script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js', defer)
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js', defer)
+    script(src="https://cdn.jsdelivr.net/npm/sweetalert2@9", defer)
+    script(src="/socket.io/socket.io.js", defer)
+    script(src="/static/js/app.js", defer)

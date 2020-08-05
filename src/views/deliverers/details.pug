@@ -1,0 +1,34 @@
+doctype html
+html(lang="es-MX")
+  include ../includes/head.pug
+  body
+    //- include ../includes/navbar-admin.pug
+    #contenido.contenido
+      h4 Detalles Pedido
+      if errorPedido
+        p= errorPedido
+      else
+        - let { cliente } = pedido
+        - let { Articulos: articulos } = pedido.pedido
+        p= pedido.creadoEl
+        h5 Dirección
+        p Col. #{cliente.colonia} calle #{cliente.calle} Num ext: #{cliente.numExt}, num int: #{cliente.numInt}. Referencias: #{cliente.referencias}
+        h5 Recibe
+        p #{cliente.nombre} #{cliente.apellido}. Teléfono: #{cliente.telefono}
+        h5 Artículos
+        ul.collection
+          each articulo in articulos
+            li.collection-item #{articulo.descripcion}. Cantidad: #{articulo.cantidad}
+        h5 Notas
+        p= pedido.notas ? pedido.notas : 'Este pedido no tiene indicaciones adicionales'
+        h5 Acciones
+        .row
+          .col.s12.input-field
+            input#id-pedido(type="hidden", value=pedido.pedido.idPedido, required)
+            input#importe(type="number", required)
+            label(for="importe") Esribe el Importe del Pedido
+          button#boton-actualizar-importe.waves-effect.waves-light.btn.blue.darken-3 Actualizar Importe
+        button.waves-effect.waves-light.btn.green.accent-4 Marcar Pedido como entregado
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js', defer)
+    script(src="https://cdn.jsdelivr.net/npm/sweetalert2@9", defer)
+    script(src="/static/js/app-deliverers.js", defer)

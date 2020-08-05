@@ -19,8 +19,8 @@ router.post('/', validacion.validarUsuario, crearUsuario);
 router.post('/actualizar', validacion.validarActualizacion, actualizarUsuario);
 router.get('/configuracion', estaAutenticado, mostrarConfiguracion);
 router.put('/avatar', estaAutenticado, actualizarAvatar);
-router.get('/notificaciones', mostrarNotificaciones);
-router.get('/historial', mostrarHistorial);
+router.get('/notificaciones', estaAutenticado, mostrarNotificaciones);
+router.get('/historial', estaAutenticado, mostrarHistorial);
 router.get(
 	'/:email',
 	estaAutenticado,

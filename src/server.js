@@ -69,16 +69,6 @@ workspaces.on('connection', (socket) => {
 		console.log(datos);
 		io.of('/' + datos.idCliente).emit('pagoActualizado', datos);
 	});
-	// if (workspace.name === '/nodejs') {
-	// 	console.log('Conexion de server');
-	// 	workspace.on('pagoActualizado', (datos) => {
-	// 		console.log(datos);
-	// 		io.of('/' + datos.idCliente).emit('pagoActualizado', datos);
-	// 	});
-	// }
-	// workspace.on('pagoActualizado', (datos) => {
-	// 	io.of(workspace.name).emit('pagoActualizado', datos);
-	// });
 });
 
 // io.on('connect', (socket) => {

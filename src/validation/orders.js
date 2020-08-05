@@ -14,7 +14,7 @@ exports.validarPedido = [
 				errorMessage: 'Debe ingresar la información del pedido',
 			},
 		},
-		'infoPedido.idCliente': {
+		'infoPedido.idUsuario': {
 			errorMessage: 'El pedido es incorrecto',
 			isInt: true,
 			toInt: true,

@@ -7,6 +7,7 @@ require('./models/User');
 require('./models/Item');
 require('./models/Order');
 require('./models/Subscription');
+require('./models/Notification');
 async function main() {
 	try {
 		await sequelize.sync();
@@ -19,5 +20,4 @@ async function main() {
 		console.log('Listening on port', process.env.PORT)
 	);
 }
-
 main();

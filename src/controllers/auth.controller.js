@@ -1,9 +1,16 @@
 const passport = require('passport');
 
 exports.mostrarLogin = (req, res) => {
-	res.render('auth/login', {
-		titulo: 'Iniciar sesión | FastShopping',
-	});
+	const { rol } = req.query;
+	if (!rol || rol === 'cliente') {
+		res.render('auth/login', {
+			titulo: 'Iniciar sesión | FastShopping',
+		});
+	} else if (rol === 'repartidor') {
+		res.render('auth/login-deliverer', {
+			titulo: 'Iniciar sesión | FastShopping',
+		});
+	}
 };
 
 exports.mostrarRegistro = (req, res) => {

@@ -385,3 +385,31 @@ input {
 	color: #088c00;
 	font-weight: 700;
 }
+/* Repartidores */
+.creado-hace,
+.direccion-pedido {
+	margin-bottom: 0;
+}
+.list-notification {
+	border-radius: 4px;
+	padding: 6px;
+}
+.list-notification p {
+	margin: 0 0 0.5rem;
+}
+.content-encabezado-listo {
+	color: #3f9f27;
+	font-weight: 700;
+}
+.content-encabezado-process {
+	color: blue;
+	font-weight: 700;
+}
+.icono-check {
+	font-size: 60px;
+	color: #3f9f27;
+}
+.icon-check-progress {
+	font-size: 60px;
+	color: blue;
+}

@@ -3,6 +3,7 @@ const { Op } = require('sequelize');
 const cloudinary = require('cloudinary');
 const fs = require('fs-extra');
 const Usuario = require('../models/User');
+const { obtenerNotificaciones } = require('./notifications.controller');
 
 cloudinary.config({
 	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -161,10 +162,22 @@ exports.actualizarAvatar = async (req, res) => {
 	}
 };
 
-exports.mostrarNotificaciones = (req, res) => {
-	res.render('users/notificaciones', {
-		title: 'Notificaciones',
-	});
+exports.mostrarNotificaciones = async (req, res) => {
+	try {
+		const notificaciones = await obtenerNotificaciones(req.user.idUsuario);
+		// res.json({ ok: true, notificaciones });
+		res.render('users/notificaciones', {
+			titulo: 'Notificaciones',
+			notificaciones,
+		});
+	} catch (err) {
+		console.log(err);
+		res.render('users/notificaciones', {
+			title: 'Notificaciones',
+			notificacionError:
+				'Hubo un Problema al obtener sus notificaciones por favor recargue la página',
+		});
+	}
 };
 
 exports.mostrarHistorial = (req, res) => {

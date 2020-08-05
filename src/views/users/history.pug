@@ -8,6 +8,7 @@ html(lang='es-MX')
             h3 Historial de compras.
             hr
             a.waves-effect.waves-light.btn.blue.darken-3(href="#") Ultimo mes                   
+            input(type="hidden", value=usuario.idUsuario, id="usuario-clave")
             
             .row
                 .col.m6.s12.htry-select
@@ -54,4 +55,7 @@ html(lang='es-MX')
             p Aún no ha realizado pedidos
             a(href="../usuarios") ¿Desea realizar alguno?
     
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js', defer)  
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js', defer)
+    script(src="https://cdn.jsdelivr.net/npm/sweetalert2@9", defer)
+    script(src="/socket.io/socket.io.js", defer)
+    script(src="/static/js/app.js", defer)
