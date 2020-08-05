@@ -1,15 +1,9 @@
 const bcrypt = require('bcrypt');
 const { Op } = require('sequelize');
-const cloudinary = require('cloudinary');
 const fs = require('fs-extra');
 const Usuario = require('../models/User');
 const { obtenerNotificaciones } = require('./notifications.controller');
-
-cloudinary.config({
-	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-	api_key: process.env.CLOUDINARY_API_KEY,
-	api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+const cloudinary = require('../config/cloudinary');
 
 exports.mostrarInicio = (req, res) => {
 	res.render('users/index', {

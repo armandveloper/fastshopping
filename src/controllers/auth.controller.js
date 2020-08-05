@@ -1,16 +1,9 @@
 const passport = require('passport');
 
 exports.mostrarLogin = (req, res) => {
-	const { rol } = req.query;
-	if (!rol || rol === 'cliente') {
-		res.render('auth/login', {
-			titulo: 'Iniciar sesión | FastShopping',
-		});
-	} else if (rol === 'repartidor') {
-		res.render('auth/login-deliverer', {
-			titulo: 'Iniciar sesión | FastShopping',
-		});
-	}
+	res.render('auth/login', {
+		titulo: 'Iniciar sesión | FastShopping',
+	});
 };
 
 exports.mostrarRegistro = (req, res) => {
@@ -35,7 +28,7 @@ exports.mostrarRegistro = (req, res) => {
 	});
 };
 
-exports.iniciarSesion = passport.authenticate('local', {
+exports.iniciarSesion = passport.authenticate('user-local', {
 	failureRedirect: '/login',
 	successRedirect: '/usuarios',
 	failureFlash: true,

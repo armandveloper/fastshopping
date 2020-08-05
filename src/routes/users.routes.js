@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { estaAutenticado } = require('../helpers/auth');
+const { estaAutenticado, esCliente } = require('../helpers/auth');
 const validacion = require('../validation/users');
 const {
 	crearUsuario,
@@ -14,16 +14,28 @@ const {
 
 const router = Router();
 
-router.get('/', estaAutenticado, mostrarInicio);
+router.get('/', estaAutenticado, esCliente, mostrarInicio);
 router.post('/', validacion.validarUsuario, crearUsuario);
-router.post('/actualizar', validacion.validarActualizacion, actualizarUsuario);
-router.get('/configuracion', estaAutenticado, mostrarConfiguracion);
-router.put('/avatar', estaAutenticado, actualizarAvatar);
-router.get('/notificaciones', estaAutenticado, mostrarNotificaciones);
-router.get('/historial', estaAutenticado, mostrarHistorial);
+router.post(
+	'/actualizar',
+	estaAutenticado,
+	esCliente,
+	validacion.validarActualizacion,
+	actualizarUsuario
+);
+router.get('/configuracion', estaAutenticado, esCliente, mostrarConfiguracion);
+router.put('/avatar', estaAutenticado, esCliente, actualizarAvatar);
+router.get(
+	'/notificaciones',
+	estaAutenticado,
+	esCliente,
+	mostrarNotificaciones
+);
+router.get('/historial', estaAutenticado, esCliente, mostrarHistorial);
 router.get(
 	'/:email',
 	estaAutenticado,
+	esCliente,
 	validacion.validarBusquedaUsuario,
 	obtenerUsuarioPorEmail
 );

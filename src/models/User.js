@@ -57,6 +57,10 @@ Usuario.init(
 			type: DataTypes.BOOLEAN,
 			defaultValue: false,
 		},
+		rol: {
+			type: DataTypes.STRING(15),
+			defaultValue: 'cliente',
+		},
 	},
 	{
 		sequelize,

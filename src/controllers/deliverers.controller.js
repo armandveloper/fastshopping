@@ -1,4 +1,50 @@
+const bcrypt = require('bcrypt');
+const fs = require('fs-extra');
+const passport = require('passport');
+const cloudinary = require('../config/cloudinary');
+const Repartidor = require('../models/Deliverer');
 const { obtenerPedidos, obtenerPedido } = require('./orders.controller');
+
+exports.crearRepartidor = async (req, res) => {
+	const { nombre, apellido, email, password, telefono } = req.body;
+	try {
+		let hash = await bcrypt.hash(password, 10);
+		const imagenSubida = await cloudinary.v2.uploader.upload(req.file.path);
+		const urlAvatar = imagenSubida.secure_url;
+		const repartidor = await Repartidor.create({
+			nombre,
+			apellido,
+			email,
+			password: hash,
+			telefono,
+			urlAvatar,
+		});
+		await fs.unlink(req.file.path);
+		res.json({
+			ok: true,
+			mensaje: 'Repartidor registrado',
+			repartidor,
+		});
+	} catch (err) {
+		console.log(err);
+		res.json({
+			ok: false,
+			error: err,
+		});
+	}
+};
+
+exports.iniciarSesion = passport.authenticate('deliverer-local', {
+	failureRedirect: '/repartidores/login',
+	successRedirect: '/repartidores',
+	failureFlash: true,
+});
+
+exports.cerrarSesion = (req, res) => {
+	req.logout();
+	req.flash('feedbackExito', 'Se ha cerrado sesión');
+	res.redirect('/repartidores/login');
+};
 
 exports.mostrarInicio = async (req, res) => {
 	try {
@@ -33,4 +79,10 @@ exports.mostrarDetallesPedido = async (req, res) => {
 				'Ocurrió un error al cargar los detales del pedido. Por favor recargue la página o inicie sesión de nuevo',
 		});
 	}
+};
+
+exports.mostrarLogin = (req, res) => {
+	res.render('auth/deliverer-login', {
+		titulo: 'Iniciar Sesión Repartidores | FastShopping',
+	});
 };
