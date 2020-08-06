@@ -64,13 +64,27 @@ workspaces.on('connection', (socket) => {
 	const workspace = socket.nsp;
 	console.log('Nueva conexión');
 	console.log(workspace.name);
+	socket.on('nuevoPedido', (datos) => {
+		console.log('Se creó un pedido');
+		console.log(datos);
+		io.of('/repartidores').emit('nuevoPedido', datos);
+	});
+	socket.on('pedidoEnProceso', (datos) => {
+		console.log('Su pedido está siendo atendido');
+		console.log(datos);
+		io.of('/' + datos.idCliente).emit('pedidoEnProceso', datos);
+	});
 	socket.on('pagoActualizado', (datos) => {
 		console.log(socket.nsp.name);
 		console.log(datos);
 		io.of('/' + datos.idCliente).emit('pagoActualizado', datos);
 	});
+	socket.on('pedidoEntregado', (datos) => {
+		console.log('Su pedido ha sido entregado');
+		console.log(datos);
+		io.of('/' + datos.idCliente).emit('pedidoEntregado', datos);
+	});
 });
-
 // io.on('connect', (socket) => {
 // 	socket.on('pagoActualizado', (datos) => {
 // 		console.log(datos);

@@ -25,10 +25,20 @@ html(lang="es-MX")
         .row
           .col.s12.input-field
             input#id-pedido(type="hidden", value=pedido.pedido.idPedido, required)
-            input#importe(type="number", required)
+            if pedido.pedido.importe
+              input#importe(type="number", required, value=pedido.pedido.importe, disabled)
+            else
+              input#importe(type="number", required)
             label(for="importe") Esribe el Importe del Pedido
-          button#boton-actualizar-importe.waves-effect.waves-light.btn.blue.darken-3 Actualizar Importe
-        button.waves-effect.waves-light.btn.green.accent-4 Marcar Pedido como entregado
+          if pedido.pedido.importe
+            button#boton-actualizar-importe.waves-effect.waves-light.btn.blue.darken-3(disabled) Actualizar Importe
+          else
+            button#boton-actualizar-importe.waves-effect.waves-light.btn.blue.darken-3 Actualizar Importe
+        if pedido.pedido.entregado
+          button#boton-pedido-entregado.waves-effect.waves-light.btn.green.accent-4(disabled) Marcar Pedido como entregado
+        else
+          button#boton-pedido-entregado.waves-effect.waves-light.btn.green.accent-4 Marcar Pedido como entregado
+
     script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js', defer)
     script(src="https://cdn.jsdelivr.net/npm/sweetalert2@9", defer)
     script(src="/static/js/app-deliverers.js", defer)

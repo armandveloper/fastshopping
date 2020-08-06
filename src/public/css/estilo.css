@@ -99,7 +99,7 @@ body {
 	border-top-left-radius: 0px;
 }
 .tabs {
-	overflow-x: auto;
+	overflow: auto;
 	position: relative;
 	display: flex;
 	height: auto;
@@ -128,6 +128,7 @@ body {
 .tab-item {
 	cursor: pointer;
 	padding: 1.5rem;
+	position: relative;
 }
 .tab-link {
 	display: flex;
@@ -320,12 +321,14 @@ input {
 .contenedor-avatar .spinner.mostrar {
 	display: block;
 }
-.contenedor-avatar .avatar {
+.avatar {
 	border-radius: 50%;
 	display: block;
 	height: 200px;
 	object-fit: cover;
 	width: 200px;
+}
+.contenedor-avatar .avatar {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -412,4 +415,20 @@ input {
 .icon-check-progress {
 	font-size: 60px;
 	color: blue;
+}
+
+/* Repartidores */
+.perfil-repartidor {
+	text-align: center;
+}
+.perfil-repartidor .saludo {
+	font-weight: 700;
+	font-size: 1.4rem;
+}
+.perfil-repartidor .avatar {
+	margin-left: auto;
+	margin-right: auto;
+}
+.perfil-repartidor .nombre {
+	font-weight: 600;
 }

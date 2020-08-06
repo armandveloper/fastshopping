@@ -4,13 +4,17 @@ html(lang="es-MX")
   body
     include ../includes/navbar-deliverers.pug
     #contenido.contenido
+      .perfil-repartidor
+        p.saludo Bienvenido
+        img.avatar(src=usuario.urlAvatar, alt=`Perfil de ${usuario.nombre}`)
+        p.nombre #{usuario.nombre} #{usuario.apellido}
       h4 Pedidos Pendientes
       hr
       if errorPedidos
         p.error= errorPedidos
       else 
         if pedidos.length === 0
-          p !No hay pedidos por hacer!
+          p#sin-pedidos !No hay pedidos por hacer!
         else
           each pedido in pedidos
             - let { info, articulos, cliente } = pedido
@@ -26,12 +30,13 @@ html(lang="es-MX")
                   each articulo in articulosMostrar
                     li #{articulo.descripcion}. Cantidad: #{articulo.cantidad}
                   if articulos.length > 3
-                    span Ver más
+                    span #{articulos.length - 3} artículos más
                 .col.s2
                   i.material-icons.htry-icon-next navigate_next
               .row
                 .col.s12
                   a.waves-effect.waves-light.btn.blue.darken-3(href=`/repartidores/detalles/${info.idPedido}`, target="_blank", rel="noopener noreferrer") Atender pedido
             hr
-      
     script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js', defer)
+    script(src="/socket.io/socket.io.js", defer)
+    script(src="/static/js/app-deliverers.js", defer)

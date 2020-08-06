@@ -4,6 +4,13 @@ html(lang='es-MX')
   body
     include ../includes/navbar-admin.pug
 
+
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js")
+    script.
+        document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.dropdown-trigger');
+        var instances = M.Dropdown.init(elems);
+        });
   
 
 

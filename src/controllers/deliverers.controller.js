@@ -1,9 +1,14 @@
 const bcrypt = require('bcrypt');
 const fs = require('fs-extra');
 const passport = require('passport');
+const moment = require('moment');
 const cloudinary = require('../config/cloudinary');
+const socket = require('../realtime/client');
 const Repartidor = require('../models/Deliverer');
 const { obtenerPedidos, obtenerPedido } = require('./orders.controller');
+const { enviarNotificacion } = require('./notifications.controller');
+
+moment.locale('es');
 
 exports.crearRepartidor = async (req, res) => {
 	const { nombre, apellido, email, password, telefono } = req.body;
@@ -70,6 +75,25 @@ exports.mostrarDetallesPedido = async (req, res) => {
 		res.render('deliverers/details', {
 			titulo: 'Detalles del Pedido',
 			pedido,
+		});
+		if (!pedido.enviarNotificacion) {
+			return;
+		}
+		let idNotificacion = await enviarNotificacion(pedido.pedido.idUsuario, {
+			titulo: 'Pedido en proceso',
+			texto: `Su pedido está siendo atendido por uno de nuestros repartidores. En breve recibirá actualizaciones sobre su estado.`,
+		});
+		console.log('Emitiendo evento pedido en proceso');
+		socket.emit('pedidoEnProceso', {
+			titulo: 'Pedido en proceso',
+			texto:
+				'Su pedido está siendo atendido por uno de nuestros repartidores. En breve recibirá actualizaciones sobre su estado.',
+			actualizadoEl: moment(
+				pedido.pedido.actualizadoEl,
+				'YYYYMMDD'
+			).fromNow(),
+			idNotificacion,
+			idCliente: pedido.pedido.idUsuario,
 		});
 	} catch (err) {
 		console.log(err);

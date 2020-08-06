@@ -466,35 +466,59 @@ function verificarSuscripcion(estado) {
 if (window.io) {
 	const socket = io('/' + idReceptor);
 
+	socket.on('pedidoEnProceso', (datos) => {
+		console.log(datos);
+		reproducirTono();
+		mostrarNotificacion(datos);
+		avisarNuevaNotificacion(datos);
+	});
+
 	socket.on('pagoActualizado', (datos) => {
 		console.log(datos);
 		// if (!navigator.serviceWorker) {
-		const audio = new Audio('/static/audio/notification.mp3');
-		audio.play();
+		reproducirTono();
 		mostrarNotificacion(datos);
 		// }
-		document
-			.getElementById('tab-notificacion')
-			.classList.add('nueva-notificacion');
-		if (location.pathname.includes('notificaciones')) {
-			const sinNotificacionesTexto = document.getElementById(
-				'sin-notificaciones'
-			);
-			if (sinNotificacionesTexto) {
-				sinNotificacionesTexto.remove();
-			}
-			mostrarTarjetaNotificacion(datos);
-		}
+		avisarNuevaNotificacion(datos);
+	});
+
+	socket.on('pedidoEntregado', (datos) => {
+		console.log(datos);
+		// if (!navigator.serviceWorker) {
+		reproducirTono();
+		mostrarNotificacion(datos);
+		// }
+		avisarNuevaNotificacion(datos);
 	});
 }
 
 // Notificaciones
+
+function reproducirTono() {
+	const audio = new Audio('/static/audio/notification.mp3');
+	audio.play();
+}
 
 function mostrarNotificacion({ texto, titulo }) {
 	new Notification(titulo, {
 		body: texto,
 		icon: '/static/img/favicons/favicon.ico',
 	});
+}
+
+function avisarNuevaNotificacion(datos) {
+	document
+		.getElementById('tab-notificacion')
+		.classList.add('nueva-notificacion');
+	if (location.pathname.includes('notificaciones')) {
+		const sinNotificacionesTexto = document.getElementById(
+			'sin-notificaciones'
+		);
+		if (sinNotificacionesTexto) {
+			sinNotificacionesTexto.remove();
+		}
+		mostrarTarjetaNotificacion(datos);
+	}
 }
 
 function mostrarTarjetaNotificacion({
@@ -504,13 +528,17 @@ function mostrarTarjetaNotificacion({
 	idNotificacion,
 }) {
 	let claseIcono =
-			titulo !== 'Pedido Entregado'
+			titulo !== 'Pedido entregado'
 				? 'icon-check-progress'
 				: 'icono-check',
 		nombreIcono =
-			claseIcono === 'icon-check-progress' ? 'cached' : 'verified',
+			titulo === 'Pedido en proceso'
+				? 'cached'
+				: titulo === 'Pedido en camino'
+				? 'motorcycle'
+				: 'verified',
 		claseEncabezado =
-			titulo !== 'Pedido Entregado'
+			titulo !== 'Pedido entregado'
 				? 'content-encabezado-process'
 				: 'content-encabezado-listo';
 

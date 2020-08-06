@@ -32,12 +32,20 @@ exports.crearPedido = async (req, res) => {
 			idPedido: pedidoDB.idPedido,
 		}));
 		const articulosDB = await Articulo.bulkCreate(articulos2);
+		const cliente = await Usuario.findOne({
+			where: {
+				idUsuario: pedidoDB.idReceptor,
+			},
+			attributes: { exclude: ['password'] },
+		});
+		socket.emit('nuevoPedido', {
+			info: pedidoDB,
+			articulos: articulosDB,
+			creadoEl: moment(pedidoDB.creadoEl, 'YYYYMMDD').fromNow(),
+			cliente,
+		});
 		res.json({
 			ok: true,
-			pedido: {
-				info: pedidoDB,
-				articulos: articulosDB,
-			},
 		});
 	} catch (err) {
 		console.log(err);
@@ -68,7 +76,6 @@ exports.crearPedido = async (req, res) => {
 // 		res.json({ ok: false, mensaje: 'Error inesperado' });
 // 	}
 // };
-
 // Obtener pedidos pendientes
 
 exports.obtenerPedidos = async () => {
@@ -129,21 +136,22 @@ exports.obtenerPedidos = async () => {
 
 exports.obtenerPedido = async (idPedido) => {
 	try {
-		const pedido = await Pedido.findByPk(idPedido, {
+		let pedido = await Pedido.findByPk(idPedido, {
 			include: Articulo,
 		});
 		if (!pedido) {
 			throw new Error('El pedido no existe');
 		}
+		let enviarNotificacion = !pedido.enProceso;
 		pedido.enProceso = true;
-		await pedido.save();
+		pedido = await pedido.save();
 		const cliente = await Usuario.findByPk(pedido.idReceptor, {
 			attributes: {
 				exclude: ['password'],
 			},
 		});
 		let creadoEl = moment(pedido.creadoEl, 'YYYYMMDD').fromNow();
-		return { pedido, cliente, creadoEl };
+		return { pedido, cliente, creadoEl, enviarNotificacion };
 	} catch (err) {
 		throw new Error(err.message);
 	}
@@ -194,15 +202,30 @@ exports.actualizarPedido = async (req, res) => {
 		const pedido = await actualizarEstado(idPedido);
 		res.json({
 			ok: true,
-			pedido,
 		});
+		const usuario = await Usuario.findByPk(pedido.idUsuario, {
+			attributes: ['nombre', 'apellido'],
+		});
+		let idNotificacion = await enviarNotificacion(pedido.idUsuario, {
+			titulo: 'Pedido entregado',
+			texto: `Hemos entregado su pedido a ${usuario.nombre} ${usuario.apellido} ¡Gracias por confiar en FastShopping!`,
+		});
+		console.log('Emitiendo evento');
+		socket.emit('pedidoEntregado', {
+			actualizadoEl: moment(pedido.actualizadoEl, 'YYYYMMDD').fromNow(),
+			idCliente: pedido.idUsuario,
+			idNotificacion,
+			titulo: 'Pedido entregado',
+			texto: `Hemos entregado su pedido a ${usuario.nombre} ${usuario.apellido} ¡Gracias por confiar en FastShopping!`,
+		});
+		console.log('Evento enviado');
 	} catch (err) {
 		console.log(err);
 		res.json({
 			ok: false,
 			error: err,
 			mensaje:
-				'Ocurrió un error al actualizar el estado de entregado, por favor intente de nuevo',
+				'Ocurrió un error al marcar el pedido como entregado. Por favor inténtelo de nuevo',
 		});
 	}
 };

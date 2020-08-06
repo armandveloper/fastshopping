@@ -1,10 +1,19 @@
 .nav-content.sub-navb
   .container
     ul.tabs.tabs-transparent
-      li.tab-item
-        a.tab-link.white-text(href="#")
+      li.tab-item.dropdown-trigger(data-target='dropdown')
+        a.tab-link.white-text(href='#')
           span.tab-link-text Gestión de Usuarios
           i.material-icons supervised_user_circle
+        ul#dropdown.dropdown-content
+          li
+            a(href='#!') Registrar repartidores
+          li.divider(tabindex='-1')
+          li
+            a(href='#!') Notificaciones
+          li.divider(tabindex='-1')
+          li
+            a(href='#!') Eliminar cuenta
       li.tab-item
         a.tab-link.white-text(href="#")
           span.tab-link-text Notificaciones
@@ -13,3 +22,8 @@
         a.tab-link.white-text(href="/logout")
           span.tab-link-text Cerrrar sesión
           i.material-icons power_settings_new
+
+      
+    
+  
+        

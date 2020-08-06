@@ -17,25 +17,24 @@ html(lang='es-MX')
                 input.id-notificacion(type="hidden", value=notificacion.idNotificacion)
                 .row.valign-wrapper
                   .col.s2
-                    if notificacion.titulo !== 'Pedido entregado'
+                    if notificacion.titulo === 'Pedido en proceso'
                       i.material-icons.icon-check-progress cached
+                    else if notificacion.titulo === 'Pedido en camino'
+                      i.material-icons.icon-check-progress motorcycle
                     else
                       i.material-icons.icono-check verified
                   .col.s10
+                    .col.s12.valign-wrapper
+                      p= creadoEl
                     if notificacion.titulo !== 'Pedido entregado'
-                      .col.s12.valign-wrapper
-                        p= creadoEl
                       .col.s12.content-encabezado-process
                         p= notificacion.titulo
-                      .col.s12
-                        p.content-pedido #{notificacion.contenido}
                     else
-                      .col.s12.valign-wrapper
-                        p= creadoEl
                       .col.s12.content-encabezado-listo
                         p= notificacion.titulo
-                      .col.s12
-                        p.content-pedido #{notificacion.contenido}
+                    .col.s12
+                      p.content-pedido #{notificacion.contenido}
+                    
                     button.boton-descartar-notificacion.waves-effect.waves-teal.btn-flat.red-text Descartar
           else
             p#sin-notificaciones No hay notificaciones para mostrar
