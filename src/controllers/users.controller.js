@@ -34,7 +34,6 @@ exports.crearUsuario = async (req, res) => {
 			password: hash,
 			telefono,
 		});
-		console.log('bien');
 		res.redirect('/login');
 	} catch (err) {
 		console.log(err);
@@ -47,10 +46,7 @@ exports.crearUsuario = async (req, res) => {
 };
 exports.obtenerUsuarioPorEmail = async (req, res) => {
 	const idUsuarioEmisor = req.get('idUsuarioEmisor');
-	console.log(typeof idUsuario);
 	const { email } = req.params;
-	console.log(email);
-	console.log(typeof email);
 	try {
 		const usuario = await Usuario.findOne({
 			where: { email },
@@ -159,14 +155,13 @@ exports.actualizarAvatar = async (req, res) => {
 exports.mostrarNotificaciones = async (req, res) => {
 	try {
 		const notificaciones = await obtenerNotificaciones(req.user.idUsuario);
-		// res.json({ ok: true, notificaciones });
-		res.render('users/notificaciones', {
+		res.render('users/notifications', {
 			titulo: 'Notificaciones',
 			notificaciones,
 		});
 	} catch (err) {
 		console.log(err);
-		res.render('users/notificaciones', {
+		res.render('users/notifications', {
 			title: 'Notificaciones',
 			notificacionError:
 				'Hubo un Problema al obtener sus notificaciones por favor recargue la página',

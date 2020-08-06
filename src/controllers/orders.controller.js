@@ -16,6 +16,9 @@ const actualizarImporte = async (idPedido, importe) => {
 
 const actualizarEstado = async (idPedido) => {
 	const pedido = await Pedido.findByPk(idPedido);
+	if (!pedido.importe) {
+		return false;
+	}
 	pedido.entregado = !pedido.entregado;
 	return await pedido.save();
 };
@@ -200,6 +203,13 @@ exports.actualizarPedido = async (req, res) => {
 	}
 	try {
 		const pedido = await actualizarEstado(idPedido);
+		if (!pedido) {
+			return res.json({
+				ok: false,
+				mensaje:
+					'Debe actualizar el precio antes de entregar un pedido',
+			});
+		}
 		res.json({
 			ok: true,
 		});

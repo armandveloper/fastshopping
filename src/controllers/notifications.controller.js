@@ -52,6 +52,7 @@ exports.obtenerNotificaciones = async (idUsuario) => {
 	try {
 		let notificaciones = await Notificacion.findAll({
 			where: { idUsuario, leido: false },
+			order: [['creadoEl', 'DESC']],
 		});
 		return notificaciones.map((notificacion) => ({
 			notificacion,

@@ -19,7 +19,7 @@ html(lang="es-MX")
           each pedido in pedidos
             - let { info, articulos, cliente } = pedido
             - let articulosMostrar = articulos.length > 3 ? articulos.slice(0, 3) : articulos
-            .htry-select
+            .htry-select(id=`pedido-${info.idPedido}`)
               .row
                 .col.s12
                   p.creado-hace= pedido.creadoEl

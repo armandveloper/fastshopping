@@ -46,6 +46,7 @@ function mostrarPedido({ articulos, info, creadoEl, cliente }) {
   `;
 	const pedidoElem = document.createElement('div');
 	pedidoElem.className = 'htry-select';
+	pedidoElem.id = 'pedido-' + info.idPedido;
 	pedidoElem.innerHTML = plantilla;
 	const sinPedidosElem = document.getElementById('sin-pedidos');
 	if (sinPedidosElem) {
@@ -66,7 +67,8 @@ function validarInput() {
 	return importe;
 }
 
-async function marcarPedidoComoEntregado() {
+async function marcarPedidoComoEntregado(e) {
+	e.target.disabled = true;
 	const resultado = await Swal.fire({
 		title: '¿Desea marcar el pedido como entregado?',
 		text: 'Esta acción no es reversible',
@@ -78,9 +80,10 @@ async function marcarPedidoComoEntregado() {
 		cancelButtonText: 'Cancelar',
 	});
 	if (!resultado.value) {
+		e.target.disabled = false;
 		return;
 	}
-	// Se marcar como entregado
+	// Se marca como entregado
 	const idPedido = document.getElementById('id-pedido').value;
 	try {
 		const respuesta = await fetch('/pedidos', {
@@ -95,23 +98,21 @@ async function marcarPedidoComoEntregado() {
 		});
 		const datos = await respuesta.json();
 		if (!datos.ok) {
-			throw new Error(
-				'Ocurrió un error al marcar el pedido como entregado. Por favor inténtelo de nuevo'
-			);
+			throw new Error(datos.mensaje);
 		}
-		botonPedidoEntregado.disabled = true;
 		Swal.fire(
 			'¡Bien Hecho!',
 			'!Buen trabajo! Haz realizado otra entrega satisfactoriamente',
 			'success'
 		);
 	} catch (err) {
-		console.log(err);
+		console.error(err);
 		Swal.fire({
 			title: 'Algo salió mal',
 			text: err.message,
 			icon: 'error',
 		});
+		e.target.disabled = false;
 	}
 }
 
@@ -179,6 +180,10 @@ function actualizarImporte(e) {
 	});
 }
 
+function eliminarPedidoInterfaz(id) {
+	document.getElementById('pedido-' + id).remove();
+}
+
 const botonActualizarImporte = document.getElementById(
 	'boton-actualizar-importe'
 );
@@ -195,29 +200,14 @@ if (botonPedidoEntregado) {
 
 // Socket io
 if (window.io) {
-	console.log('Attemting connect to websocket');
 	const socket = io('/repartidores');
-	console.log(socket);
 	socket.on('nuevoPedido', (datos) => {
-		console.log(datos);
-		// if (!navigator.serviceWorker) {
 		const audio = new Audio('/static/audio/notification.mp3');
 		audio.play();
 		mostrarPedido(datos);
-
-		// mostrarNotificacion(datos);
-		// }
-		// document
-		// 	.getElementById('tab-notificacion')
-		// 	.classList.add('nueva-notificacion');
-		// if (location.pathname.includes('notificaciones')) {
-		// 	const sinNotificacionesTexto = document.getElementById(
-		// 		'sin-notificaciones'
-		// 	);
-		// 	if (sinNotificacionesTexto) {
-		// 		sinNotificacionesTexto.remove();
-		// 	}
-		// 	mostrarTarjetaNotificacion(datos);
-		// }
+	});
+	socket.on('yaFueAtendido', (idPedido) => {
+		console.log(idPedido);
+		eliminarPedidoInterfaz(idPedido);
 	});
 }

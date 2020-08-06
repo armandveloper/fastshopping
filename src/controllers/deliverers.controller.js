@@ -71,6 +71,7 @@ exports.mostrarInicio = async (req, res) => {
 exports.mostrarDetallesPedido = async (req, res) => {
 	const { id } = req.params;
 	try {
+		socket.emit('yaFueAtendido', id);
 		const pedido = await obtenerPedido(id);
 		res.render('deliverers/details', {
 			titulo: 'Detalles del Pedido',
@@ -83,7 +84,6 @@ exports.mostrarDetallesPedido = async (req, res) => {
 			titulo: 'Pedido en proceso',
 			texto: `Su pedido está siendo atendido por uno de nuestros repartidores. En breve recibirá actualizaciones sobre su estado.`,
 		});
-		console.log('Emitiendo evento pedido en proceso');
 		socket.emit('pedidoEnProceso', {
 			titulo: 'Pedido en proceso',
 			texto:

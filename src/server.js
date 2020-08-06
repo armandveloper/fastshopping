@@ -64,11 +64,17 @@ workspaces.on('connection', (socket) => {
 	const workspace = socket.nsp;
 	console.log('Nueva conexión');
 	console.log(workspace.name);
+	// Eventos de repartidores
 	socket.on('nuevoPedido', (datos) => {
 		console.log('Se creó un pedido');
 		console.log(datos);
 		io.of('/repartidores').emit('nuevoPedido', datos);
 	});
+	socket.on('yaFueAtendido', (idPedido) => {
+		io.of('/repartidores').emit('yaFueAtendido', idPedido);
+	});
+
+	// Eventos de clientes
 	socket.on('pedidoEnProceso', (datos) => {
 		console.log('Su pedido está siendo atendido');
 		console.log(datos);
@@ -85,39 +91,6 @@ workspaces.on('connection', (socket) => {
 		io.of('/' + datos.idCliente).emit('pedidoEntregado', datos);
 	});
 });
-// io.on('connect', (socket) => {
-// 	socket.on('pagoActualizado', (datos) => {
-// 		console.log(datos);
-// 	});
-// });
-
-// io.on('connect', (socket) => {
-// 	console.log('Nueva conexión a namespace default');
-// });
-
-// io.on('connect', (socket) => {
-// 	console.log(`new connection ${socket.id}`);
-// 	const session = socket.request.session;
-// 	console.log(`saving sid ${socket.id} in session ${session.id}`);
-// 	session.socketId = socket.id;
-// 	session.save();
-// 	const { user: usuario } = socket.request;
-// 	console.log(usuario);
-// 	socket.on('pagoActualizado', (datos) => {
-//     console.log(datos);
-//     socket.to()
-
-//   });
-//   io.
-// 	if (usuario) {
-// 		io.to(socket.id).emit(
-// 			'saludar',
-// 			'Hola ' + usuario.nombre + usuario.apellido
-// 		);
-// 	}
-
-// 	// socket.emit('saludar', 'Hello everyone');
-// });
 
 require('./realtime/client');
 
