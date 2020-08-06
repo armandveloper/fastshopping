@@ -432,3 +432,21 @@ input {
 .perfil-repartidor .nombre {
 	font-weight: 600;
 }
+.btn-register-r{
+    width: 40%;
+    max-width: 300px;
+    background: #3F9F27;
+    border: none;
+    padding-left: 30px;
+    padding-right: 30px;
+    color: white;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 1rem;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 4px;
+}
+.btn-register-r:hover{
+    background: #4ABF16;
+}
