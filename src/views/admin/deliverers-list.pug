@@ -1,0 +1,29 @@
+doctype html
+html(lang='es-MX')
+  include ../includes/head
+  body
+    include ../includes/navbar-admin
+    include ../includes/messages
+
+    #contenido.contenido
+      h3.center Lista de Repartidores
+      hr
+      if errorRepartidores
+        p= errorRepartidores
+      else
+        .row
+          each repartidor in repartidores
+            .col.m6
+              .row.valign-wrapper
+                .col.s3
+                  img.responsive-img.circle(src=repartidor.urlAvatar, alt=repartidor.nombre)
+                .col.s9
+                  p.correo-bold #{repartidor.email}
+                  p #{repartidor.nombre} #{repartidor.apellido}
+                  a(href=`/admin/plantilla-repartidores/${repartidor.idRepartidor}`) Ver Repartidor
+          else
+            p No hay Repartidores que mostrar
+          
+
+    include ../includes/footer-admin
+  

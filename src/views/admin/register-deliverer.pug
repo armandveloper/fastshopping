@@ -1,0 +1,36 @@
+doctype html
+html(lang='es-MX')
+  include ../includes/head
+  body
+    include ../includes/navbar-admin
+    include ../includes/messages
+    .contenido
+      h3.center Registrar Repartidor
+      hr
+      .row
+        form.col-s12(action="/repartidores", method="POST", enctype="multipart/form-data")
+          .row
+            .input-field.col.s6
+              input#nombre.validate(type='text', required='', name="nombre", value=nombre)
+              label(for='nombre') Nombre
+            .input-field.col.s6
+              input#apellidos.validate(type='text', required='', name="apellido", value=apellido)
+              label(for='apellidos') Apellido
+          .input-field.col.s6
+            input#email.validate(type='email', required='', name="email", value=email)
+            label(for='email') Correo electrónico
+          .input-field.col.s6
+            input#password.validate(type='password', required='', name="password", minlength="8")
+            label(for='password') Contraseña mínimo de 8 caracteres
+          .input-field.col.s12.m6
+            input#telefono.validate(type='tel', required='', name="telefono", pattern="[0-9]{3}[0-9]{3}[0-9]{4}", value=telefono)
+            label(for='telefono') Número de télefono
+          .file-field.input-field.col.s12.m6
+            .btn-small.white.black-text
+              span Imagen de perfil
+              input(type='file', name="imagen", required, accept=".png,.svg,.jpg,.jpeg")
+            .file-path-wrapper
+              input.file-path.validate(type='text')
+          button.waves-effect.waves-light.btn.green.accent-4(type='submit') Registrar repartidor
+
+    include ../includes/footer-admin

@@ -102,7 +102,7 @@ async function marcarPedidoComoEntregado(e) {
 		}
 		Swal.fire(
 			'¡Bien Hecho!',
-			'!Buen trabajo! Haz realizado otra entrega satisfactoriamente',
+			'¡Buen trabajo! Haz realizado otra entrega satisfactoriamente!',
 			'success'
 		);
 	} catch (err) {

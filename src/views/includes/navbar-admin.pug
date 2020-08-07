@@ -1,24 +1,42 @@
-.nav-content.sub-navb
+header.site-header
   .container
-    ul.tabs.tabs-transparent
-      li.tab-item.dropdown-trigger(data-target='dropdown')
-        a.tab-link.white-text(href='#')
-          span.tab-link-text Gestión de Usuarios
-          i.material-icons supervised_user_circle
-        ul#dropdown.dropdown-content
-          li
-            a(href='#!') Registrar repartidores
-          li.divider(tabindex='-1')
-          li
-            a(href='#!') Notificaciones
-          li.divider(tabindex='-1')
-          li
-            a(href='#!') Eliminar cuenta
-      li.tab-item
-        a.tab-link.white-text(href="#")
-          span.tab-link-text Notificaciones
-          i#tab-notificacion.material-icons notifications
-      li.tab-item
-        a.tab-link.white-text(href="/logout")
-          span.tab-link-text Cerrrar sesión
-          i.material-icons power_settings_new
+    .header-contenido
+      ul#slide-out.sidenav
+        li
+          .user-view
+            .background
+              img(src='/static/img/bg.jpg')
+            a(href='/admin/configuracion')
+              img.circle(src=usuario.urlAvatar, alt=`${usuario.nombre} ${usuario.apellido}`)
+            a(href='/admin/configuracion')
+              span.white-text.name #{usuario.nombre} #{usuario.apellido}
+            a(href='#/admin/configuracion')
+              span.white-text.email #{usuario.email}
+        li
+          a(href="/admin")
+            i.material-icons home
+            | Inicio
+        li.no-padding
+          ul.collapsible.collapsible-accordion
+            li
+              a.collapsible-header
+                i.material-icons arrow_drop_down
+                | Gestión de usuarios
+              .collapsible-body
+                ul
+                  li
+                    a(href='/admin/registrar-repartidor') Registrar Repartidor
+                  li
+                    a(href='/admin/plantilla-repartidores') Ver Repartidores
+        li
+          a(href="/admin/configuracion")
+            i.material-icons settings
+            | Configuración
+        li
+          a.waves-effect.waves-red(href="/admin/logout")
+            i.material-icons power_settings_new
+            | Cerrrar sesión
+
+      a.sidenav-trigger.white-text(href='#', data-target='slide-out')
+        i.material-icons menu
+      h1.titulo Panel de Administración

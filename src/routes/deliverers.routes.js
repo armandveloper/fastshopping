@@ -1,11 +1,13 @@
 const { Router } = require('express');
-const { estaAutenticado, esRepartidor } = require('../helpers/auth');
+const { estaAutenticado, esRepartidor, esAdmin } = require('../helpers/auth');
 const validacion = require('../validation/deliverers');
 const {
 	mostrarInicio,
 	mostrarDetallesPedido,
 	mostrarLogin,
 	crearRepartidor,
+	actualizarRepartidor,
+	eliminarRepartidor,
 	iniciarSesion,
 	cerrarSesion,
 } = require('../controllers/deliverers.controller');
@@ -20,8 +22,28 @@ router.get(
 	mostrarDetallesPedido
 );
 router.get('/login', mostrarLogin);
-router.post('/', validacion.validarRepartidor, crearRepartidor);
+router.post(
+	'/',
+	estaAutenticado,
+	esAdmin,
+	validacion.validarRepartidor,
+	crearRepartidor
+);
+router.post(
+	'/actualizar',
+	estaAutenticado,
+	esAdmin,
+	validacion.validarActualizacion,
+	actualizarRepartidor
+);
 router.post('/signin', validacion.validarInicioSesion, iniciarSesion);
 router.get('/logout', cerrarSesion);
+router.delete(
+	'/',
+	estaAutenticado,
+	esAdmin,
+	validacion.validarId,
+	eliminarRepartidor
+);
 
 module.exports = router;

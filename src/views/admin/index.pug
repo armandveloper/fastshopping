@@ -2,13 +2,26 @@ doctype html
 html(lang='es-MX')
   include ../includes/head
   body
-    include ../includes/navbar-admin.pug
+    h1.center.titulo-panel-admin Panel de Administración
 
+    #contenido.contenido
+      h3.center-align Gestión de Usuarios
+      hr
+      .row
+        a.center-align.col.m6.buttons-panel-control(href="/admin/registrar-repartidor")
+          h5 Agregar Repartidor
+          img.responsive-img.img-admin-btn(src="/static/img/anadir.svg")
+        a.center-align.col.m6.buttons-panel-control(href="/admin/plantilla-repartidores")
+          h5 Lista de Repartidores
+          img.responsive-img.img-admin-btn(src="/static/img/lista-usuarios.svg")
+      h3.center-align Otras Configuraciones
+      hr
+      .row
+        a.center-align.col.m6.buttons-panel-control(href="/admin/configuracion")
+          h5 Configuración
+          img.responsive-img.img-admin-btn(src="/static/img/ajustes-admin.svg")
+        a.center-align.col.m6.buttons-panel-control(href="/admin/logout")
+          h5 Cerrar Sesión
+          img.responsive-img.img-admin-btn(src="/static/img/cerrar-admin.svg")
 
     script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js")
-    script.
-        document.addEventListener('DOMContentLoaded', function() {
-        var elems = document.querySelectorAll('.dropdown-trigger');
-        var instances = M.Dropdown.init(elems);
-        });
-  

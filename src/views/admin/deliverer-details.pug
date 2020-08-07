@@ -1,0 +1,38 @@
+doctype html
+html(lang='es-MX')
+  include ../includes/head
+  body
+    include ../includes/navbar-admin
+    include ../includes/messages    
+    #contenido.contenido
+      h3.center Detalles de Repartidor
+      hr
+      .contenedor-avatar.admin
+        img#avatar.avatar(src=repartidor.urlAvatar, width="60", height="60")
+      .row
+        form.col.s12(action="/repartidores/actualizar", method="POST")
+          .row
+            .input-field.col.m6
+              input#nombre.validate(type="text" name="nombre" required, value=repartidor.nombre)
+              label(for="nombre") Nombre
+            .input-field.col.m6
+              input#apellido.validate(type="text" name="apellido" required, value=repartidor.apellido)
+              label(for="apellido") Apellido
+            .input-field.col.m6
+              input.validate(type="password", id="password", name="password", minlength="8") 
+              label(for="password") Campo Opcional para cambiar contraseña
+            .input-field.col.m6
+              input#telefono.validate(type="tel" name="telefono" required, pattern="[0-9]{3}[0-9]{3}[0-9]{4}", value=repartidor.telefono)
+              label(for="telefono") Número de telefono
+            input(type="hidden", name="idRepartidor", value=repartidor.idRepartidor)
+
+          .auth-acciones
+            button.waves-effect.waves-light.btn.green.accent-4.btn-details-repart(type='submit') Actualizar información
+            button#boton-eliminar-repartidor.waves-effect.waves-light.btn.red.accent-4.btn-details-repart(type='button', value=repartidor.idRepartidor) Eliminar Repartidor
+
+
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js", defer)
+    script(src="https://cdn.jsdelivr.net/npm/sweetalert2@9", defer)
+    script(src="/static/js/app-admin.js", defer)
+
+  

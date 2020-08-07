@@ -1,9 +1,9 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/db');
 
-class Deliverer extends Model {}
+class Repartidor extends Model {}
 
-Deliverer.init(
+Repartidor.init(
 	{
 		idRepartidor: {
 			type: DataTypes.INTEGER,
@@ -44,4 +44,4 @@ Deliverer.init(
 	}
 );
 
-module.exports = Deliverer;
+module.exports = Repartidor;

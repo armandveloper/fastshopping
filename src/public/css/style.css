@@ -15,6 +15,11 @@ body {
 	background-color: #212121;
 	margin: 0;
 }
+ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
 /* Layout */
 .contenido {
 	background-color: #fff;
@@ -87,7 +92,6 @@ body {
 	}
 }
 .sub-navb {
-	/* background: #3b5998; */
 	background-color: #021e3a;
 	color: #fff;
 }
@@ -99,14 +103,15 @@ body {
 	border-top-left-radius: 0px;
 }
 .tabs {
-	overflow: auto;
+	overflow-x: auto;
 	position: relative;
 	display: flex;
-	height: auto;
+	height: unset;
 	align-items: center;
 	justify-content: space-between;
 }
-.nav-content {
+.nav-content,
+.nav-content .container {
 	position: relative;
 }
 .nav-content .container::after {
@@ -128,7 +133,6 @@ body {
 .tab-item {
 	cursor: pointer;
 	padding: 1.5rem;
-	position: relative;
 }
 .tab-link {
 	display: flex;
@@ -156,6 +160,18 @@ body {
 		padding-left: 0;
 		padding-right: 0;
 	}
+}
+.tab-item > .dropdown {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+}
+.dropdown li a {
+	color: #fff;
+}
+.tab-item:hover .dropdown {
+	display: block;
 }
 .nueva-notificacion {
 	position: relative;
@@ -284,6 +300,11 @@ input {
 	margin-right: auto;
 	margin-bottom: 1.5rem;
 	margin-left: auto;
+}
+.contenedor-avatar.admin {
+	margin-right: auto;
+	margin-left: auto;
+	margin-bottom: 2.5rem;
 }
 @media (min-width: 576px) {
 	.configuracion-usuario-top {
@@ -432,21 +453,51 @@ input {
 .perfil-repartidor .nombre {
 	font-weight: 600;
 }
-.btn-register-r{
-    width: 40%;
-    max-width: 300px;
-    background: #3F9F27;
-    border: none;
-    padding-left: 30px;
-    padding-right: 30px;
-    color: white;
-    text-transform: uppercase;
-    text-align: center;
-    font-size: 1rem;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    border-radius: 4px;
+/* Administrador */
+/* Menú */
+.site-header {
+	background-color: #021e3a;
 }
-.btn-register-r:hover{
-    background: #4ABF16;
+.header-contenido {
+	color: #fff;
+	padding: 0.5rem;
+	text-align: center;
+	display: flex;
+}
+.header-contenido .titulo {
+	flex: 1;
+	margin: 0;
+	font-size: 1.1rem;
+}
+.btn-register-r {
+	width: 40%;
+	max-width: 300px;
+	background: #3f9f27;
+	border: none;
+	padding-left: 30px;
+	padding-right: 30px;
+	color: white;
+	text-transform: uppercase;
+	text-align: center;
+	font-size: 1rem;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border-radius: 4px;
+}
+/*Administrador lista de repatidores*/
+.btn-register-r:hover {
+	background: #4abf16;
+}
+.correo-bold {
+	font-weight: 700;
+	margin: none;
+}
+.btn-details-repart {
+	display: block;
+}
+.titulo-panel-admin {
+	color: white;
+}
+.img-admin-btn {
+	width: 180px;
 }

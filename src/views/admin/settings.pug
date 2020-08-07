@@ -1,0 +1,32 @@
+doctype html
+html(lang='es-MX')
+  include ../includes/head
+  body
+    include ../includes/navbar-admin
+    include ../includes/messages
+    #contenido.contenido
+        .setting-admin
+            h3.center Configuración de Administrador
+            form(action="/admin/actualizar", method="POST", enctype="multipart/form-data").row
+              .contenedor-avatar.admin
+                img#avatar.avatar(src=usuario.urlAvatar, alt=usuario.nombre width="60", height="60")
+                input#editar-avatar.editar-avatar(type="file", name="imagen", accept=".png,.svg,.jpg,.jpeg")
+                label.editar-avatar-boton(for="editar-avatar")
+                  i.editar-avatar-icono.material-icons mode_edit
+                  | Editar
+              input(type="hidden", name="id", value=usuario.idAdmin)
+              .col.s12
+                .input-field.col.s6
+                  input.validate(name="nombre", id="nombre", type="text", required, value=usuario.nombre)
+                  label(for="nombre") Nombre
+                .input-field.col.s6
+                  input.validate(name="apellido", id="apellido", type="text", required, value=usuario.apellido)
+                  label(for="apellido") Apellidos
+                .input-field.col.s6
+                  input.validate(type="email", id="email", name="email", required, value=usuario.email)
+                  label(for="email") Correo electrónico
+                .input-field.col.s6
+                  input.validate(type="password", id="password", name="password", minlength="8") 
+                  label(for="password") Campo Opcional para cambiar contraseña
+              button.waves-effect.waves-light.btn.green.accent-4(type='submit') Actualizar Cuenta
+    include ../includes/footer-admin

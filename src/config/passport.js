@@ -3,6 +3,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const Usuario = require('../models/User');
 const Repartidor = require('../models/Deliverer');
+const Admin = require('../models/Admin');
 
 passport.use(
 	'user-local',
@@ -66,6 +67,37 @@ passport.use(
 	)
 );
 
+passport.use(
+	'admin-local',
+	new LocalStrategy(
+		{
+			usernameField: 'email',
+			passwordField: 'password',
+		},
+		async (email, password, terminar) => {
+			try {
+				const admin = await Admin.findOne({
+					where: { email },
+				});
+				if (!admin) {
+					return terminar(null, false, {
+						message: 'Usuario o contraseña incorrectos',
+					});
+				}
+				if (!(await bcrypt.compare(password, admin.password))) {
+					return terminar(null, false, {
+						message: 'Usuario o contraseña incorrectos',
+					});
+				}
+				return terminar(null, admin);
+			} catch (err) {
+				console.log(err);
+				return terminar(err);
+			}
+		}
+	)
+);
+
 passport.serializeUser((usuario, terminar) => {
 	terminar(null, usuario);
 });
@@ -81,6 +113,12 @@ passport.deserializeUser(async (usuario, terminar) => {
 			});
 		} else if (usuario.rol === 'repartidor') {
 			usuarioDB = await Repartidor.findByPk(usuario.idRepartidor, {
+				attributes: {
+					exclude: ['password'],
+				},
+			});
+		} else {
+			usuarioDB = await Admin.findByPk(usuario.idAdmin, {
 				attributes: {
 					exclude: ['password'],
 				},
