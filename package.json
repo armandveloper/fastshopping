@@ -2,14 +2,13 @@
 	"name": "fastshopping",
 	"version": "1.0.0",
 	"description": "Proyecto para la materia de integradora",
-  "main": "index.js",
-  "engines": {
-    "node": "14.5.0"
-  },
+	"main": "index.js",
+	"engines": {
+		"node": "14.5.0"
+	},
 	"scripts": {
 		"dev": "cross-env NODE_ENV=development nodemon --ignore src/public/ src/index",
-		"start": "cross-env NODE_ENV=production node src/index",
-		"build": "babel src -d dist"
+		"start": "cross-env NODE_ENV=production node src/index"
 	},
 	"keywords": [
 		"nodejs",
