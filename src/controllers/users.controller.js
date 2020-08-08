@@ -1,9 +1,10 @@
 const bcrypt = require('bcrypt');
 const { Op } = require('sequelize');
 const fs = require('fs-extra');
+const cloudinary = require('../config/cloudinary');
 const Usuario = require('../models/User');
 const { obtenerNotificaciones } = require('./notifications.controller');
-const cloudinary = require('../config/cloudinary');
+const { obtenerPedidoPorUsuario } = require('./orders.controller');
 
 exports.mostrarInicio = (req, res) => {
 	res.render('users/index', {
@@ -169,10 +170,20 @@ exports.mostrarNotificaciones = async (req, res) => {
 	}
 };
 
-exports.mostrarHistorial = (req, res) => {
-	res.render('users/history', {
-		title: 'Historial de compras',
-	});
+exports.mostrarHistorial = async (req, res) => {
+	try {
+		const pedidos = await obtenerPedidoPorUsuario(req.user.idUsuario);
+		return res.render('users/history', {
+			titulo: 'Historial de pedidos',
+			pedidos,
+		});
+	} catch (err) {
+		return res.render('users/history', {
+			titulo: 'Historial de pedidos',
+			errorHistorial:
+				'No pudimos obtener su historial. Por favor intente más tarde',
+		});
+	}
 };
 
 exports.mostrarConfiguracion = (req, res) => {

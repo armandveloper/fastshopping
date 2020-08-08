@@ -1,3 +1,4 @@
+const sequelize = require('sequelize');
 const moment = require('moment');
 const Pedido = require('../models/Order');
 const Articulo = require('../models/Item');
@@ -59,26 +60,30 @@ exports.crearPedido = async (req, res) => {
 	}
 };
 
-// Obtener todos los pedidos
-// exports.obtenerPedidos = async (req, res) => {
-// 	try {
-// 		const pedidos = await Pedido.findAll();
-// 		const pedidosConArticulos = await Promise.all(
-// 			pedidos.map(async (pedido) => {
-// 				const articulos = await Articulo.findAll({
-// 					where: {
-// 						idPedido: pedido.idPedido,
-// 					},
-// 				});
-// 				return { info: pedido, articulos };
-// 			})
-// 		);
-// 		res.json({ ok: true, pedidos: pedidosConArticulos });
-// 	} catch (err) {
-// 		console.log(err);
-// 		res.json({ ok: false, mensaje: 'Error inesperado' });
-// 	}
-// };
+// Obtener pedido por usuario
+exports.obtenerPedidoPorUsuario = async (idUsuario) => {
+	try {
+		let pedidos = await Pedido.findAll({
+			include: Articulo,
+			where: {
+				idUsuario,
+				entregado: true,
+				[sequelize.Op.and]: sequelize.where(
+					sequelize.fn('month', sequelize.col('creadoEl')),
+					sequelize.literal('MONTH(CURRENT_TIMESTAMP)')
+				),
+			},
+		});
+		pedidos = pedidos.map((pedido) => ({
+			pedido,
+			entregadoEl: moment(pedido.actualizadoEl).format('LL'),
+		}));
+		return pedidos;
+	} catch (err) {
+		throw new Error('Error al cargar el historial');
+	}
+};
+
 // Obtener pedidos pendientes
 
 exports.obtenerPedidos = async () => {
@@ -106,36 +111,6 @@ exports.obtenerPedidos = async () => {
 		throw new Error(err.message);
 	}
 };
-
-// exports.obtenerPedido = async (req, res) => {
-// 	const { id } = req.params;
-// 	try {
-// 		const pedido = await Pedido.findOne({
-// 			where: {
-// 				idPedido: id,
-// 			},
-// 		});
-// 		if (!pedido) {
-// 			return res.json({ ok: true, mensaje: 'El pedido no existe' });
-// 		}
-// 		const articulos = await Articulo.findAll({
-// 			where: {
-// 				idPedido: pedido.idPedido,
-// 			},
-// 		});
-
-// 		res.json({
-// 			ok: true,
-// 			pedido: {
-// 				info: pedido,
-// 				articulos,
-// 			},
-// 		});
-// 	} catch (err) {
-// 		console.log(err);
-// 		res.json({ ok: false, mensaje: 'Error inesperado' });
-// 	}
-// };
 
 exports.obtenerPedido = async (idPedido) => {
 	try {
@@ -220,7 +195,6 @@ exports.actualizarPedido = async (req, res) => {
 			titulo: 'Pedido entregado',
 			texto: `Hemos entregado su pedido a ${usuario.nombre} ${usuario.apellido} ¡Gracias por confiar en FastShopping!`,
 		});
-		console.log('Emitiendo evento');
 		socket.emit('pedidoEntregado', {
 			actualizadoEl: moment(pedido.actualizadoEl, 'YYYYMMDD').fromNow(),
 			idCliente: pedido.idUsuario,
@@ -228,7 +202,6 @@ exports.actualizarPedido = async (req, res) => {
 			titulo: 'Pedido entregado',
 			texto: `Hemos entregado su pedido a ${usuario.nombre} ${usuario.apellido} ¡Gracias por confiar en FastShopping!`,
 		});
-		console.log('Evento enviado');
 	} catch (err) {
 		console.log(err);
 		res.json({

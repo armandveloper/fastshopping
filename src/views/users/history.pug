@@ -4,56 +4,32 @@ html(lang='es-MX')
   body
     include ../includes/navbar
     #contenido.contenido
-            h3 Historial de compras.
-            hr
-            a.waves-effect.waves-light.btn.blue.darken-3(href="#") Ultimo mes                   
-            input(type="hidden", value=usuario.idUsuario, id="usuario-clave")
-            
-            .row
-                .col.m6.s12.htry-select
-                    p.color-text-noentregado Pedido en proceso
-                    .row.valign-wrapper
-                        .col.s10.htry-list
-                            li Laptop de 3000 pesos
-                            li Mica 9D para Redmi Note 8 dual
-                            li Funda uso rudo para Redmi Note 8 dual
-                        .col.s2
-                            i.material-icons.htry-icon-next navigate_next
-                    hr
-                .col.m6.s12.htry-select
-                    p.color-text-entregado Entregado 12/07/20
-                    .row.valign-wrapper
-                        .col.s10.htry-list
-                            li Redmi Note 8 dual
-                            li Mica 9D para Redmi Note 8 dual
-                            li Funda uso rudo para Redmi Note 8 dual
-                        .col.s2
-                            i.material-icons.htry-icon-next navigate_next
-                    hr
-                .col.m6.s12.htry-select
-                    p.color-text-entregado Entregado 15/07/20
-                    .row.valign-wrapper
-                        .col.s10.htry-list
-                            li Redmi Note 8 dual
-                            li Mica 9D para Redmi Note 8 dual
-                            li Funda uso rudo para Redmi Note
-                        .col.s2
-                            i.material-icons.htry-icon-next navigate_next
-                    hr
-                .col.m6.s12.htry-select
-                    p.color-text-entregado Entregado 31/07/20
-                    .row.valign-wrapper
-                        .col.s10.htry-list
-                            li Redmi Note 8 dual
-                            li Mica 9D para Redmi Note 8 dual
-                            li Funda uso rudo para Redmi Note dual
-                        .col.s2
-                            i.material-icons.htry-icon-next navigate_next
-                    hr
-                
+      h3.center-align Historial de compras
+      hr
+      h5.center-align Este mes
+      input(type="hidden", value=usuario.idUsuario, id="usuario-clave")
+      if errorHistorial
+        p= errorHistorial
+      else
+        .row
+          each infoPedido in pedidos
+            - let { pedido, entregadoEl } = infoPedido
+            - let { Articulos: articulos } = pedido
+            - let articulosMostrar = articulos.length > 3 ? articulos.slice(0, 3) : articulos
+            .col.m6.s12.htry-select
+              p Usted pagó: $#{pedido.total}
+              p.color-text-noentregado Entregado el #{entregadoEl}
+              .row.valign-wrapper
+                .col.s12.htry-list
+                  each articulo in articulosMostrar
+                    li #{articulo.descripcion}. Cantidad #{articulo.cantidad}
+                  if articulos.length > 3
+                    span #{articulos.length - 3} artículos más
+              hr
+          else
             p Aún no ha realizado pedidos
-            a(href="../usuarios") ¿Desea realizar alguno?
-    
+            a(href="/usuarios") ¿Desea realizar alguno?
+               
     script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js', defer)
     script(src="https://cdn.jsdelivr.net/npm/sweetalert2@9", defer)
     script(src="/socket.io/socket.io.js", defer)
