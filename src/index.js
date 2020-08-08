@@ -3,16 +3,9 @@ if (process.env.NODE_ENV !== 'production') {
 }
 const sequelize = require('./config/db');
 const app = require('./server');
-require('./models/Admin');
-require('./models/User');
-require('./models/Deliverer');
-require('./models/Item');
-require('./models/Order');
-require('./models/Subscription');
-require('./models/Notification');
 async function main() {
 	try {
-		await sequelize.sync();
+		await sequelize.authenticate();
 		console.log('Connection has been established successfully.');
 	} catch (error) {
 		console.error('Unable to connect to the database:', error);

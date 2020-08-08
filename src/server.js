@@ -17,13 +17,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.use('/static', express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-const almacen = multer.diskStorage({
-	destination: path.join(__dirname, 'public', 'uploads'),
-	filename: (req, archivo, cb) => {
-		cb(null, nanoid() + path.extname(archivo.originalname));
-	},
-});
-app.use(multer({ storage: almacen }).single('imagen'));
 const sessionMiddleware = session({
 	secret: 'clave_secreta',
 	resave: false,
@@ -32,6 +25,13 @@ const sessionMiddleware = session({
 app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
+const almacen = multer.diskStorage({
+	destination: path.join(__dirname, 'public', 'uploads'),
+	filename: (req, archivo, cb) => {
+		cb(null, nanoid() + path.extname(archivo.originalname));
+	},
+});
+app.use(multer({ storage: almacen }).single('imagen'));
 app.use(flash());
 app.use((req, res, next) => {
 	res.locals.feedbackExito = req.flash('feedbackExito');
